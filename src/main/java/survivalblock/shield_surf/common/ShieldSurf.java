@@ -7,8 +7,8 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
-import survivalblock.shield_surf.common.init.UnboundEntityTypes;
-import survivalblock.shield_surf.common.init.UnboundSoundEvents;
+import survivalblock.shield_surf.common.init.ShieldSurfEntityTypes;
+import survivalblock.shield_surf.common.init.ShieldSurfSoundEvents;
 
 public class ShieldSurf implements ModInitializer {
 	public static final String MOD_ID = "shield_surf";
@@ -17,8 +17,8 @@ public class ShieldSurf implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ShieldSurfEnchantments.init();
-		UnboundEntityTypes.init();
-		UnboundSoundEvents.init();
+		ShieldSurfEntityTypes.init();
+		ShieldSurfSoundEvents.init();
 		MidnightConfig.init(MOD_ID, ShieldSurfConfig.class);
 	}
 

@@ -15,8 +15,8 @@ import net.minecraft.world.World;
 import survivalblock.shield_surf.common.component.ShieldStackComponent;
 import survivalblock.shield_surf.common.init.ShieldSurfDamageTypes;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
-import survivalblock.shield_surf.common.init.UnboundEntityTypes;
-import survivalblock.shield_surf.common.init.UnboundSoundEvents;
+import survivalblock.shield_surf.common.init.ShieldSurfEntityTypes;
+import survivalblock.shield_surf.common.init.ShieldSurfSoundEvents;
 
 import java.util.Objects;
 
@@ -28,7 +28,7 @@ public class ProjectedShieldEntity extends PersistentProjectileEntity {
     }
 
     public ProjectedShieldEntity(World world, LivingEntity owner, ItemStack stack) {
-        super(UnboundEntityTypes.PROJECTED_SHIELD, owner.getX(), (owner.getY() * 4 + owner.getEyeY()) / 5, owner.getZ(), world);
+        super(ShieldSurfEntityTypes.PROJECTED_SHIELD, owner.getX(), (owner.getY() * 4 + owner.getEyeY()) / 5, owner.getZ(), world);
         this.getShieldStackComponent().setShieldStack(stack.copyWithCount(stack.getCount()));
         this.setNoGravity(true);
         this.setOwner(owner);
@@ -85,6 +85,6 @@ public class ProjectedShieldEntity extends PersistentProjectileEntity {
 
     @Override
     protected SoundEvent getHitSound() {
-        return UnboundSoundEvents.ENTITY_PROJECTED_SHIELD_HIT;
+        return ShieldSurfSoundEvents.ENTITY_PROJECTED_SHIELD_HIT;
     }
 }

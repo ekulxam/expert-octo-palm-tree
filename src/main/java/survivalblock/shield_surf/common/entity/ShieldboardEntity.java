@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.function.BooleanBiFunction;
@@ -24,7 +23,7 @@ import survivalblock.shield_surf.common.component.ShieldStackComponent;
 import survivalblock.shield_surf.common.component.ShieldboardSpeedComponent;
 import survivalblock.shield_surf.common.init.ShieldSurfDamageTypes;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
-import survivalblock.shield_surf.common.init.UnboundEntityTypes;
+import survivalblock.shield_surf.common.init.ShieldSurfEntityTypes;
 
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class ShieldboardEntity extends Entity {
     }
 
     public ShieldboardEntity(World world, LivingEntity rider, ItemStack stack) {
-        super(UnboundEntityTypes.SHIELDBOARD, world);
+        super(ShieldSurfEntityTypes.SHIELDBOARD, world);
         this.setInputs(false, false, true, false);
         this.getShieldStackComponent().setShieldStack(stack.copyWithCount(stack.getCount()));
         this.setPos(rider.getX(), rider.getY(), rider.getZ());
