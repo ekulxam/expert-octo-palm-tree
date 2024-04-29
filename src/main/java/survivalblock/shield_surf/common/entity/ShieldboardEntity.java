@@ -2,7 +2,10 @@ package survivalblock.shield_surf.common.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LilyPadBlock;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
@@ -10,7 +13,6 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.FluidTags;
@@ -18,6 +20,7 @@ import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.*;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import survivalblock.shield_surf.common.component.ShieldStackComponent;
@@ -44,6 +47,7 @@ public class ShieldboardEntity extends Entity {
         super(type, world);
         this.getShieldStackComponent().setShieldStack(Items.SHIELD.getDefaultStack());
         this.getShieldboardSpeedComponent().setCurrentBaseSpeed(0);
+        this.setStepHeight(0.6f);
     }
 
     @Override
@@ -60,6 +64,7 @@ public class ShieldboardEntity extends Entity {
         this.location = BoatEntity.Location.IN_WATER;
         this.getShieldboardSpeedComponent().setCurrentBaseSpeed(rider.getMovementSpeed());
         this.setYaw(rider.getYaw());
+        this.setStepHeight(0.6f);
     }
 
     public void setInputs(boolean pressingLeft, boolean pressingRight, boolean pressingForward, boolean pressingBack){
@@ -124,7 +129,7 @@ public class ShieldboardEntity extends Entity {
         ShieldStackComponent shieldStackComponent = this.getShieldStackComponent();
         if (controllingPassenger instanceof PlayerEntity player) {
             player.getInventory().offerOrDrop(shieldStackComponent.getShieldStack());
-        } else {
+        } else if (this.getWorld().getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             this.dropStack(shieldStackComponent.getShieldStack());
         }
         shieldStackComponent.setShieldStack(ItemStack.EMPTY);
