@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "package": "survivalblock.shield_surf.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "aegis.LivingEntityMixin",
+    "aegis.PlayerEntityMixin",
+    "expulsion.LivingEntityMixin",
+    "expulsion.ShieldItemMixin",
+    "shieldsurf.ShieldItemMixin",
+    "vanillachanges.enchantableshields.EnchantmentHelperMixin",
+    "vanillachanges.enchantableshields.ItemMixin",
+    "vanillachanges.enchantableshields.ShieldItemMixin"
+  ],
+  "client": [
+    "rapid.ClientPlayerEntityMixin",
+    "shieldsurf.client.BipedEntityModelMixin",
+    "shieldsurf.client.BuiltinModelItemRendererMixin",
+    "shieldsurf.client.ClientPlayerEntityMixin",
+    "shieldsurf.client.ItemRendererAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

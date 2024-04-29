@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "shield_surf",
+  "version": "${version}",
+  "name": "Shield Surfing",
+  "description": "Enchancement but I completely removed (most) handicaps",
+  "authors": [
+	"Survivalblock"
+  ],
+  "contact": {
+	"homepage": "https://www.curseforge.com/minecraft/mc-mods/enchancement",
+	"sources": "https://github.com/MoriyaShiine/enchancement",
+	"issues": "https://github.com/MoriyaShiine/enchancement/issues"
+  },
+  "license": "MIT-0",
+  "icon": "assets/shield_surf/icon.png",
+  "environment": "*",
+  "entrypoints": {
+	"main": [
+		"survivalblock.shield_surf.common.ShieldSurf"
+	],
+	"client": [
+	  "survivalblock.shield_surf.client.ShieldSurfClient"
+	],
+    "cardinal-components-entity": [
+      "survivalblock.shield_surf.common.init.ShieldSurfEntityComponents"
+    ]
+  },
+  "mixins": [
+    "shield_surf.mixins.json"
+  ],
+  "depends": {
+	"fabricloader": "*",
+	"minecraft": "~1.20.1",
+	"java": ">=17",
+	"fabric-api": ">=0.84.0"
+  },
+  "custom": {
+    "cardinal-components": [
+      "shield_surf:shield_stack",
+      "shield_surf:shieldboard_speed"
+    ]
+  }
+}
