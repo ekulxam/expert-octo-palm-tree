@@ -28,7 +28,7 @@ public class ProjectedShieldEntity extends PersistentProjectileEntity {
     }
 
     public ProjectedShieldEntity(World world, LivingEntity owner, ItemStack stack) {
-        super(ShieldSurfEntityTypes.PROJECTED_SHIELD, owner.getX(), (owner.getY() * 4 + owner.getEyeY()) / 5, owner.getZ(), world);
+        super(ShieldSurfEntityTypes.PROJECTED_SHIELD, owner.getX(), Math.ceil(-1 + owner.getY() + (owner.getHeight()) / 2), owner.getZ(), world);
         this.getShieldStackComponent().setShieldStack(stack.copyWithCount(stack.getCount()));
         this.setNoGravity(true);
         this.setOwner(owner);

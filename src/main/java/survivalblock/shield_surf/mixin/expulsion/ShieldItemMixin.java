@@ -8,12 +8,14 @@ import net.minecraft.item.ShieldItem;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import survivalblock.shield_surf.access.ExpulsionDamageAccess;
+import survivalblock.shield_surf.common.ShieldSurf;
 import survivalblock.shield_surf.common.ShieldSurfConfig;
 import survivalblock.shield_surf.common.entity.ProjectedShieldEntity;
 import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
@@ -33,16 +35,22 @@ public class ShieldItemMixin {
         } else if (damage < 100) {
             damage = 100;
         }
-        ProjectedShieldEntity projectedShield;
-        for (float i = 0; i < 360; i += 360 / (float) (expulsionLevel * ShieldSurfConfig.expulsionMultiplier)) {
-            projectedShield = new ProjectedShieldEntity(world, user, stack);
-            projectedShield.setYaw(i + user.getYaw());
-            world.spawnEntity(projectedShield);
-            projectedShield.setVelocity(user, projectedShield.getPitch(), projectedShield.getYaw(), 0.0f, 0.3f, 0.0f);
-            projectedShield.setDamage(Math.max(damage, 4));
+        try {
+            ProjectedShieldEntity projectedShield;
+            for (float i = 0; i < 360; i += 360 / (float) (expulsionLevel * ShieldSurfConfig.expulsionMultiplier)) {
+                projectedShield = new ProjectedShieldEntity(world, user, stack);
+                projectedShield.setYaw(i + user.getYaw());
+                world.spawnEntity(projectedShield);
+                projectedShield.setVelocity(user, projectedShield.getPitch(), projectedShield.getYaw(), 0.0f, 0.3f, 0.0f);
+                Vec3d velocity = projectedShield.getVelocity();
+                projectedShield.setVelocity(velocity.x, Math.max(-0.1, velocity.y), velocity.z);
+                projectedShield.setDamage(Math.max(damage, 4));
+            }
+            stack.damage(2, user, (p) -> p.sendToolBreakStatus(user.getActiveHand()));
+            user.incrementStat(Stats.USED.getOrCreateStat((ShieldItem) (Object) this));
+            user.getItemCooldownManager().set((ShieldItem) (Object) this, 200);
+        } catch (Exception e) {
+            ShieldSurf.LOGGER.warn("A Projected Shield has Thrown an Exception!", e);
         }
-        stack.damage(2, user, (p) -> p.sendToolBreakStatus(user.getActiveHand()));
-        user.incrementStat(Stats.USED.getOrCreateStat((ShieldItem) (Object) this));
-        user.getItemCooldownManager().set((ShieldItem) (Object) this, 200);
     }
 }
