@@ -18,7 +18,7 @@ public class ShieldSurfEntityComponents implements EntityComponentInitializer {
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(ShieldboardEntity.class, SHIELD_STACK, ShieldStackComponent::new);
-        registry.registerFor(ShieldboardEntity.class, SHIELDBOARD_SPEED, ShieldboardSpeedComponent::new);
         registry.registerFor(ProjectedShieldEntity.class, SHIELD_STACK, ShieldStackComponent::new);
+        registry.registerFor(ShieldboardEntity.class, SHIELDBOARD_SPEED, ShieldboardSpeedComponent::new);
     }
 }

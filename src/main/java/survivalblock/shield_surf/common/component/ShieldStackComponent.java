@@ -33,6 +33,6 @@ public class ShieldStackComponent implements AutoSyncedComponent {
 
     public void setShieldStack(ItemStack shieldStack) {
         this.shieldStack = shieldStack;
-        ShieldSurfEntityComponents.SHIELDBOARD_SPEED.sync(this.obj);
+        ShieldSurfEntityComponents.SHIELD_STACK.sync(this.obj);
     }
 }

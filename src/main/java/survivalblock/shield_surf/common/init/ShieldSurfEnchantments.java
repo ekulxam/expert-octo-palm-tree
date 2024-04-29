@@ -11,8 +11,8 @@ import survivalblock.shield_surf.common.enchantment.*;
 public class ShieldSurfEnchantments {
     public static final Enchantment SHIELD_SURF = new ShieldSurfingEnchantment(Enchantment.Rarity.RARE, EnchantmentTarget.FISHING_ROD, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
     public static final Enchantment AEGIS = new ShieldSurfingEnchantment(Enchantment.Rarity.VERY_RARE, EnchantmentTarget.FISHING_ROD, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
-    public static final Enchantment RAPID = new ShieldSurfingEnchantment(Enchantment.Rarity.RARE, EnchantmentTarget.FISHING_ROD, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
-    public static final Enchantment EXPULSION = new ShieldSurfingEnchantment(1, 6, Enchantment.Rarity.RARE, EnchantmentTarget.FISHING_ROD, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
+    public static final Enchantment RAPID = new ShieldSurfingEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.FISHING_ROD, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
+    public static final Enchantment EXPULSION = new ShieldSurfingEnchantment(1, 6, Enchantment.Rarity.UNCOMMON, EnchantmentTarget.FISHING_ROD, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
 
     public static void init() {
         Registry.register(Registries.ENCHANTMENT, ShieldSurf.id("shield_surf"), SHIELD_SURF);

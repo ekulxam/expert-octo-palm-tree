@@ -10,6 +10,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.FluidTags;
@@ -37,10 +38,12 @@ public class ShieldboardEntity extends Entity {
     private boolean shouldGoBackward;
     private boolean shouldTurnLeft;
     private boolean shouldTurnRight;
+    public static final double maxSpeed = 0.7;
 
     public ShieldboardEntity(EntityType<?> type, World world) {
         super(type, world);
         this.getShieldStackComponent().setShieldStack(Items.SHIELD.getDefaultStack());
+        this.getShieldboardSpeedComponent().setCurrentBaseSpeed(0);
     }
 
     @Override
@@ -50,7 +53,7 @@ public class ShieldboardEntity extends Entity {
 
     public ShieldboardEntity(World world, LivingEntity rider, ItemStack stack) {
         super(ShieldSurfEntityTypes.SHIELDBOARD, world);
-        this.setInputs(false, false, true, false);
+        this.setInputs(false, false, false, false);
         this.getShieldStackComponent().setShieldStack(stack.copyWithCount(stack.getCount()));
         this.setPos(rider.getX(), rider.getY(), rider.getZ());
         this.lastLocation = BoatEntity.Location.IN_AIR;
@@ -81,7 +84,6 @@ public class ShieldboardEntity extends Entity {
     private ShieldboardSpeedComponent getShieldboardSpeedComponent(){
         return ShieldSurfEntityComponents.SHIELDBOARD_SPEED.get(this);
     }
-
     @Override
     public boolean collidesWith(Entity other) {
         return false;
@@ -142,6 +144,9 @@ public class ShieldboardEntity extends Entity {
 
     @Override
     public void tick() {
+        if (!this.getWorld().isClient() && this.getShieldStackComponent().getShieldStack().getDamage() == this.getShieldStackComponent().getShieldStack().getMaxDamage()) {
+            this.discard();
+        }
         this.lastLocation = this.location;
         this.location = this.checkLocation();
         this.ticksUnderwater = this.location == BoatEntity.Location.UNDER_WATER || this.location == BoatEntity.Location.UNDER_FLOWING_WATER ? this.ticksUnderwater + 1.0f : 0.0f;
@@ -153,13 +158,18 @@ public class ShieldboardEntity extends Entity {
         this.tickRotation(getControlledRotation(living));
         this.tickMovement();
         this.checkBlockCollision();
-        List<Entity> list = this.getWorld().getOtherEntities(this, this.getBoundingBox().expand(0.15f, 0.1f, 0.15f), EntityPredicates.canBePushedBy(this));
-        if (!list.isEmpty()) {
-            for (Entity entity : list) {
-                if (this.hasPassenger(entity) || entity.hasPassenger(this)) continue;
-                this.pushAwayFrom(entity);
-                entity.damage(new DamageSource(ShieldSurfDamageTypes.get(ShieldSurfDamageTypes.SHIELDBOARD_COLLISION, this.getWorld()), this, living), 4f);
+        if (!this.getWorld().isClient()) {
+            List<Entity> list = this.getWorld().getOtherEntities(this, this.getBoundingBox().expand(0.15f, 0.1f, 0.15f), EntityPredicates.EXCEPT_SPECTATOR);
+            if (!list.isEmpty()) {
+                for (Entity entity : list) {
+                    if (this.hasPassenger(entity) || entity.hasPassenger(this)) continue;
+                    entity.pushAwayFrom(this);
+                    entity.damage(new DamageSource(ShieldSurfDamageTypes.get(ShieldSurfDamageTypes.SHIELDBOARD_COLLISION, this.getWorld()), this, living), 4f);
+                }
             }
+        }
+        if (!this.getWorld().isClient() && this.getControllingPassenger() instanceof PlayerEntity player && this.age % 20 == 0) {
+            this.getShieldStackComponent().getShieldStack().damage(1, player, (p) -> p.sendToolBreakStatus(player.getActiveHand()));
         }
     }
 
@@ -210,11 +220,6 @@ public class ShieldboardEntity extends Entity {
         return new Vec2f(controllingPassenger.getPitch() * 0.5f, controllingPassenger.getYaw());
     }
 
-    @Override
-    public void changeLookDirection(double cursorDeltaX, double cursorDeltaY) {
-        super.changeLookDirection(cursorDeltaX, cursorDeltaY);
-    }
-
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
@@ -247,7 +252,7 @@ public class ShieldboardEntity extends Entity {
 
     @Override
     public double getMountedHeightOffset() {
-        return super.getMountedHeightOffset() + 0.29;
+        return super.getMountedHeightOffset() + 0.259;
     }
 
     @Override
@@ -263,10 +268,13 @@ public class ShieldboardEntity extends Entity {
         if (!this.hasPassengers()) {
             return;
         }
+        LivingEntity controller = this.getControllingPassenger();
+        if (controller != null && Math.abs(this.getShieldboardSpeedComponent().getCurrentBaseSpeed()) < (maxSpeed / 2) && !(controller instanceof PlayerEntity)) {
+            this.setInputs(false, false, true, false);
+        }
         this.velocityDirty = true;
         double speed;
         @SuppressWarnings("SpellCheckingInspection") final double celeration = 0.004; // lol
-        final double maxSpeed = 0.68;
         if (this.shouldAccelerateForward || this.shouldGoBackward || this.shouldTurnRight || this.shouldTurnLeft) {
             speed = MathHelper.clamp(this.getShieldboardSpeedComponent().getCurrentBaseSpeed() + (celeration * (this.location == BoatEntity.Location.IN_AIR && this.lastLocation == BoatEntity.Location.IN_AIR ? 1.5 : 1)), -maxSpeed, maxSpeed); // speed of board (in blocks/sec) in air is equivalent to speed * 20
         } else {
@@ -284,7 +292,7 @@ public class ShieldboardEntity extends Entity {
         if (this.location != null && this.location.compareTo(BoatEntity.Location.IN_WATER) == 0) {
             speed *= 1.75;
         }
-        yVelocity += this.shouldStepUp() ? this.location == BoatEntity.Location.ON_LAND && this.lastLocation == BoatEntity.Location.ON_LAND ? this.soulSandStuck() : 0.08 : 0;
+        yVelocity += this.shouldStepUp() ? this.location == BoatEntity.Location.ON_LAND && this.lastLocation == BoatEntity.Location.ON_LAND ? this.soulSandStuck() : 0.095 : 0;
         this.setVelocity(MathHelper.sin(-this.getYaw() * ((float) Math.PI / 180)) * speed, yVelocity, MathHelper.cos(this.getYaw() * ((float) Math.PI / 180)) * speed);
         this.velocityModified = true;
     }
@@ -294,7 +302,7 @@ public class ShieldboardEntity extends Entity {
             return 0;
         }
         double blockHeightAtPos = this.getBlockStateAtPos().getCollisionShape(this.getWorld(), this.getBlockPos()).getMax(Direction.Axis.Y);
-        return valueMap(blockHeightAtPos, 0, 1.6, 0, 0.25);
+        return valueMap(blockHeightAtPos, 0, 1.6, 0, 0.255);
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -523,5 +531,12 @@ public class ShieldboardEntity extends Entity {
     @Override
     public boolean canHit() {
         return this.getControllingPassenger() == null;
+    }
+
+    @Override
+    public boolean shouldSpawnSprintingParticles() {
+        boolean hasEnoughSpeed = Math.abs(this.getShieldboardSpeedComponent().getCurrentBaseSpeed()) > (maxSpeed / 2);
+        LivingEntity controller = this.getControllingPassenger();
+        return !this.isInLava() && this.isAlive() && !this.isTouchingWater() && controller != null && !controller.shouldSpawnSprintingParticles() && hasEnoughSpeed && !this.horizontalCollision;
     }
 }

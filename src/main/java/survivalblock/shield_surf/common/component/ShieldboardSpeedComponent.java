@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.util.math.MathHelper;
 import survivalblock.shield_surf.common.entity.ShieldboardEntity;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
 
@@ -32,7 +33,7 @@ public class ShieldboardSpeedComponent implements AutoSyncedComponent {
     }
 
     public void setCurrentBaseSpeed(double currentBaseSpeed) {
-        this.currentBaseSpeed = currentBaseSpeed;
-        ShieldSurfEntityComponents.SHIELD_STACK.sync(this.obj);
+        this.currentBaseSpeed = MathHelper.clamp(currentBaseSpeed, -ShieldboardEntity.maxSpeed, ShieldboardEntity.maxSpeed);
+        ShieldSurfEntityComponents.SHIELDBOARD_SPEED.sync(this.obj);
     }
 }

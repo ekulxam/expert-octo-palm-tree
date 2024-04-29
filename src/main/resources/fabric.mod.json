@@ -3,7 +3,7 @@
   "id": "shield_surf",
   "version": "${version}",
   "name": "Shield Surfing",
-  "description": "Enchancement but I completely removed (most) handicaps",
+  "description": "Adds some shield enchantments to Minecraft",
   "authors": [
 	"Survivalblock"
   ],
