@@ -14,9 +14,13 @@
   "enchantment.shield_surf.rapid.desc": "Using the shield will not impede movement",
   "enchantment.shield_surf.expulsion": "Expulsion",
   "enchantment.shield_surf.expulsion.desc": "Using the shield while sneaking will cast out shields in a circle around the user. Damage scales with the greatest damage taken by the user since last cast.",
+  "enchantment.shield_surf.orbit": "Orbit",
+  "enchantment.shield_surf.orbit.desc": "Using the shield will summon a shield satellite that will orbit around the player. The shield satellite will block any entity-based damage only once before breaking.",
   "shield_surf.midnightconfig.title": "Shield Surfing Config",
   "shield_surf.midnightconfig.category.client": "Client",
   "shield_surf.midnightconfig.expulsionMultiplier": "Expulsion Projectile Multiplier",
   "shield_surf.midnightconfig.projectedShieldsRenderOutwards": "Projected Shields Render Outwards",
-  "shield_surf.midnightconfig.projectedShieldsRenderWithHandle": "Projected Shields Render With handle"
+  "shield_surf.midnightconfig.projectedShieldsRenderWithHandle": "Projected Shields Render With handle",
+  "shield_surf.midnightconfig.orbitingShieldsFlattenWhileSwimming": "Orbiting Shields Render Sideways When The Player's Height Is At Most One",
+  "shield_surf.midnightconfig.orbitingShieldsRotateClockwise": "Orbiting Shields Rotate Clockwise Around Their Origin"
 }

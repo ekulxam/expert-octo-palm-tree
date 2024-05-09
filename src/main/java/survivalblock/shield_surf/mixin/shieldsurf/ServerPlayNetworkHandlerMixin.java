@@ -13,8 +13,8 @@ import survivalblock.shield_surf.common.entity.ShieldboardEntity;
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerMixin {
 
-    @ModifyExpressionValue(method = "onVehicleMove", at = @At(value = "CONSTANT", args = "doubleValue=0.0625"))
+    @ModifyExpressionValue(method = "onVehicleMove", at = @At(value = "CONSTANT", args = "doubleValue=0.0625", ordinal = 1))
     private double neverMoveWrongly(double original, @Local(ordinal = 0) Entity entity){
-        return entity instanceof ShieldboardEntity ? original + 0.0375 : original;
+        return entity instanceof ShieldboardEntity ? original + 1 : original;
     }
 }

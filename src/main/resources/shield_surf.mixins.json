@@ -7,6 +7,8 @@
     "aegis.PlayerEntityMixin",
     "expulsion.LivingEntityMixin",
     "expulsion.ShieldItemMixin",
+    "orbit.PlayerEntityMixin",
+    "orbit.ShieldItemMixin",
     "shieldsurf.ServerPlayNetworkHandlerMixin",
     "shieldsurf.ShieldItemMixin",
     "vanillachanges.enchantableshields.EnchantmentHelperMixin",
@@ -14,6 +16,7 @@
     "vanillachanges.enchantableshields.ShieldItemMixin"
   ],
   "client": [
+    "orbit.client.PlayerEntityRendererMixin",
     "rapid.ClientPlayerEntityMixin",
     "shieldsurf.client.BipedEntityModelMixin",
     "shieldsurf.client.BuiltinModelItemRendererMixin",

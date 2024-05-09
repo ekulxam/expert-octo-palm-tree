@@ -7,6 +7,6 @@
 		"item/shield/block4",
 		"item/shield/block5"
 	],
-	"subtitle": "subtitles.enchancement_unbound.entity.projected_shield.hit"
+	"subtitle": "subtitles.shield_surf.entity.projected_shield.hit"
   }
 }

@@ -8,12 +8,10 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import survivalblock.shield_surf.common.enchantment.ShieldSurfingEnchantment;
 
-@Debug(export = true)
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
 

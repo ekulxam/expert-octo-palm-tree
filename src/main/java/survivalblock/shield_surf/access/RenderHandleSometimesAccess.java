@@ -1,5 +1,5 @@
 package survivalblock.shield_surf.access;
 
 public interface RenderHandleSometimesAccess {
-    void enchancement_unbound$setShouldRenderShieldHandle(boolean shouldRender);
+    void shield_surf$setShouldRenderShieldHandle(boolean shouldRender);
 }

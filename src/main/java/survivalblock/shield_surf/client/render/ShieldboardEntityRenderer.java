@@ -37,9 +37,9 @@ public class ShieldboardEntityRenderer extends EntityRenderer<ShieldboardEntity>
         matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0F));
         matrixStack.translate(0f, 0f, -0.135f);
         BuiltinModelItemRenderer builtinModelItemRenderer = ((ItemRendererAccessor) MinecraftClient.getInstance().getItemRenderer()).getBuiltinModelItemRenderer();
-        ((RenderHandleSometimesAccess) builtinModelItemRenderer).enchancement_unbound$setShouldRenderShieldHandle(false);
+        ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(false);
         builtinModelItemRenderer.render(stack, ModelTransformationMode.NONE, matrixStack, vertexConsumerProvider, light, overlay);
-        ((RenderHandleSometimesAccess) builtinModelItemRenderer).enchancement_unbound$setShouldRenderShieldHandle(true);
+        ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(true);
         matrixStack.pop();
         super.render(shieldboardEntity, yaw, tickDelta, matrixStack, vertexConsumerProvider, light);
     }

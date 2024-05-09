@@ -46,11 +46,14 @@ public class ShieldItemMixin {
                 projectedShield.setVelocity(velocity.x, Math.max(-0.1, velocity.y), velocity.z);
                 projectedShield.setDamage(Math.max(damage, 4));
             }
-            stack.damage(2, user, (p) -> p.sendToolBreakStatus(user.getActiveHand()));
+            if (!user.isCreative()) {
+                stack.damage(2, user, (p) -> p.sendToolBreakStatus(user.getActiveHand()));
+                user.getItemCooldownManager().set((ShieldItem) (Object) this, 200);
+                user.stopUsingItem();
+            }
             user.incrementStat(Stats.USED.getOrCreateStat((ShieldItem) (Object) this));
-            user.getItemCooldownManager().set((ShieldItem) (Object) this, 200);
         } catch (Exception e) {
-            ShieldSurf.LOGGER.warn("A Projected Shield has Thrown an Exception!", e);
+            ShieldSurf.LOGGER.error("An exception occurred while trying to summon a Projected Shield", e);
         }
     }
 }

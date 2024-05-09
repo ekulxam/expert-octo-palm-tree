@@ -1,6 +1,8 @@
 package survivalblock.shield_surf.common.util;
 
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -8,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 import survivalblock.shield_surf.common.enchantment.ShieldSurfingEnchantment;
 import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
 
@@ -48,4 +51,16 @@ public class ShieldSurfUtil {
         return !(other instanceof ShieldSurfingEnchantment) || other == original;
     }
 
+    public static RenderLayer getOrbitingShieldsRenderLayer(boolean showBody, boolean translucent, boolean showOutline, Identifier texture, Model model) {
+        if (showOutline) {
+            return RenderLayer.getOutline(texture);
+        }
+        if (translucent) {
+            return null;
+        }
+        if (showBody) {
+            return model.getLayer(texture);
+        }
+        return null;
+    }
 }

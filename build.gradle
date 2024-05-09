@@ -41,7 +41,6 @@ dependencies {
 
     include modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cardinal_components_version}")
     include modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cardinal_components_version}")
-    include modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-world:${cardinal_components_version}")
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     include modImplementation("maven.modrinth:midnightlib:${project.midnightlib_version}")
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"

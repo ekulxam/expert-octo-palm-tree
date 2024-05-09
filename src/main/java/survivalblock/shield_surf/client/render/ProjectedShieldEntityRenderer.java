@@ -31,9 +31,9 @@ public class ProjectedShieldEntityRenderer extends EntityRenderer<ProjectedShiel
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(yaw + (ShieldSurfConfig.projectedShieldsRenderOutwards ? 0 : 180)));
         matrixStack.translate(0.0f, 0.6f, 0.0f);
         BuiltinModelItemRenderer builtinModelItemRenderer = ((ItemRendererAccessor) MinecraftClient.getInstance().getItemRenderer()).getBuiltinModelItemRenderer();
-        ((RenderHandleSometimesAccess) builtinModelItemRenderer).enchancement_unbound$setShouldRenderShieldHandle(ShieldSurfConfig.projectedShieldsRenderWithHandle);
+        ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(ShieldSurfConfig.projectedShieldsRenderWithHandle);
         builtinModelItemRenderer.render(stack, ModelTransformationMode.NONE, matrixStack, vertexConsumerProvider, light, overlay);
-        ((RenderHandleSometimesAccess) builtinModelItemRenderer).enchancement_unbound$setShouldRenderShieldHandle(true);
+        ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(true);
         matrixStack.pop();
         super.render(projectedShield, yaw, tickDelta, matrixStack, vertexConsumerProvider, light);
     }

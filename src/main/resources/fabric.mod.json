@@ -38,7 +38,8 @@
   "custom": {
     "cardinal-components": [
       "shield_surf:shield_stack",
-      "shield_surf:shieldboard_speed"
+      "shield_surf:shieldboard_speed",
+      "shield_surf:shield_satellites"
     ]
   }
 }

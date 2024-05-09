@@ -12,6 +12,7 @@ import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
 public class ShieldboardSpeedComponent implements AutoSyncedComponent {
     private final ShieldboardEntity obj;
     private double currentBaseSpeed;
+    private boolean wasFlying;
 
     public ShieldboardSpeedComponent(ShieldboardEntity obj) {
         this.obj = obj;
@@ -21,11 +22,13 @@ public class ShieldboardSpeedComponent implements AutoSyncedComponent {
     @Override
     public void readFromNbt(NbtCompound tag) {
         this.currentBaseSpeed = tag.getDouble("CurrentBaseSpeed");
+        this.wasFlying = tag.getBoolean("WasFlyingWhenSummoned");
     }
 
     @Override
     public void writeToNbt(NbtCompound tag) {
         tag.putDouble("CurrentBaseSpeed", this.currentBaseSpeed);
+        tag.putBoolean("WasFlyingWhenSummoned", this.wasFlying);
     }
 
     public double getCurrentBaseSpeed() {
@@ -35,5 +38,14 @@ public class ShieldboardSpeedComponent implements AutoSyncedComponent {
     public void setCurrentBaseSpeed(double currentBaseSpeed) {
         this.currentBaseSpeed = MathHelper.clamp(currentBaseSpeed, -ShieldboardEntity.maxSpeed, ShieldboardEntity.maxSpeed);
         ShieldSurfEntityComponents.SHIELDBOARD_SPEED.sync(this.obj);
+    }
+
+    public void setWasFlying(boolean wasFlying) {
+        this.wasFlying = wasFlying;
+        ShieldSurfEntityComponents.SHIELDBOARD_SPEED.sync(this.obj);
+    }
+
+    public boolean getWasFlying() {
+        return this.wasFlying;
     }
 }

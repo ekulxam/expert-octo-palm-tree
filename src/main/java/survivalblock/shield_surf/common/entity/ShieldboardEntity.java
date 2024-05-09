@@ -41,6 +41,7 @@ public class ShieldboardEntity extends Entity {
     private boolean shouldGoBackward;
     private boolean shouldTurnLeft;
     private boolean shouldTurnRight;
+    private boolean flyingUp;
     public static final double maxSpeed = 0.7;
 
     public ShieldboardEntity(EntityType<?> type, World world) {
@@ -57,17 +58,27 @@ public class ShieldboardEntity extends Entity {
 
     public ShieldboardEntity(World world, LivingEntity rider, ItemStack stack) {
         super(ShieldSurfEntityTypes.SHIELDBOARD, world);
-        this.setInputs(false, false, false, false);
+        setInputs();
+        if (rider.isSprinting()) rider.setSprinting(false);
         this.getShieldStackComponent().setShieldStack(stack.copyWithCount(stack.getCount()));
         this.setPos(rider.getX(), rider.getY(), rider.getZ());
         this.lastLocation = BoatEntity.Location.IN_AIR;
         this.location = BoatEntity.Location.IN_WATER;
         this.getShieldboardSpeedComponent().setCurrentBaseSpeed(rider.getMovementSpeed());
+        this.getShieldboardSpeedComponent().setWasFlying(false);
         this.setYaw(rider.getYaw());
         this.setStepHeight(0.6f);
     }
 
-    public void setInputs(boolean pressingLeft, boolean pressingRight, boolean pressingForward, boolean pressingBack){
+    public void setInputs(){
+        this.setInputs(false, false, false, false, false);
+    }
+
+    public void setInputs(boolean pressingLeft, boolean pressingRight, boolean pressingForward, boolean pressingBack) {
+        this.setInputs(pressingLeft, pressingRight, pressingForward, pressingBack, false);
+    }
+
+    public void setInputs(boolean pressingLeft, boolean pressingRight, boolean pressingForward, boolean pressingBack, boolean flyingUp){
         this.shouldAccelerateForward = pressingForward;
         if (pressingForward) {
             this.shouldGoBackward = false;
@@ -81,6 +92,7 @@ public class ShieldboardEntity extends Entity {
             this.shouldTurnLeft = pressingLeft;
             this.shouldTurnRight = pressingRight;
         }
+        this.flyingUp = flyingUp;
     }
 
     private ShieldStackComponent getShieldStackComponent(){
@@ -262,7 +274,7 @@ public class ShieldboardEntity extends Entity {
 
     @Override
     protected boolean canAddPassenger(Entity passenger) {
-        return this.getPassengerList().size() < this.getMaxPassengers() && !this.isSubmergedIn(FluidTags.WATER);
+        return this.getPassengerList().size() < this.getMaxPassengers();
     }
 
     protected int getMaxPassengers() {
@@ -297,14 +309,15 @@ public class ShieldboardEntity extends Entity {
         if (this.location != null && this.location.compareTo(BoatEntity.Location.IN_WATER) == 0) {
             speed *= 1.75;
         }
-        yVelocity += this.shouldStepUp() ? this.location == BoatEntity.Location.ON_LAND && this.lastLocation == BoatEntity.Location.ON_LAND ? this.soulSandStuck() : 0.095 : 0;
+        yVelocity += this.shouldGetOutOfBlock() ? this.location == BoatEntity.Location.ON_LAND && this.lastLocation == BoatEntity.Location.ON_LAND ? this.soulSandStuck() : 0.095 : 0;
         this.setVelocity(MathHelper.sin(-this.getYaw() * ((float) Math.PI / 180)) * speed, yVelocity, MathHelper.cos(this.getYaw() * ((float) Math.PI / 180)) * speed);
+        if (this.getShieldboardSpeedComponent().getWasFlying() && this.flyingUp) this.setVelocity(this.getVelocity().x, Math.max(0.5, this.getVelocity().y), this.getVelocity().z);
         this.velocityModified = true;
     }
 
     private double soulSandStuck(){
         if (Math.abs(this.getY() - Math.round(this.getY())) <= 0.05 || Math.abs(this.getY() - (Math.round(this.getY())) + 0.5) <= 0.05) {
-            return 0;
+            return 0; // this is handled by step height so I don't need to do anything
         }
         double blockHeightAtPos = this.getBlockStateAtPos().getCollisionShape(this.getWorld(), this.getBlockPos()).getMax(Direction.Axis.Y);
         return valueMap(blockHeightAtPos, 0, 1.6, 0, 0.255);
@@ -316,7 +329,7 @@ public class ShieldboardEntity extends Entity {
         return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
-    private boolean shouldStepUp(){
+    private boolean shouldGetOutOfBlock(){
         // easier for more logic
         if (!this.horizontalCollision) {
             return false;
@@ -369,7 +382,7 @@ public class ShieldboardEntity extends Entity {
                 for (int q = m; q < n; ++q) {
                     mutable.set(p, o, q);
                     FluidState fluidState = this.getWorld().getFluidState(mutable);
-                    if (fluidState.isIn(FluidTags.WATER)) {
+                    if (this.shouldFloatIn(fluidState)) {
                         f = Math.max(f, fluidState.getHeight(this.getWorld(), mutable));
                     }
                     if (f >= 1.0f) continue block0;
@@ -379,6 +392,11 @@ public class ShieldboardEntity extends Entity {
             return (float)mutable.getY() + f;
         }
         return l + 1;
+    }
+
+    @SuppressWarnings("unused")
+    protected boolean shouldFloatIn(FluidState fluidState) {
+        return true;
     }
 
     public float getNearbySlipperiness() {
@@ -403,7 +421,7 @@ public class ShieldboardEntity extends Entity {
                     mutable.set(p, s, q);
                     BlockState blockState = this.getWorld().getBlockState(mutable);
                     if (blockState.getBlock() instanceof LilyPadBlock || !VoxelShapes.matchesAnywhere(blockState.getCollisionShape(this.getWorld(), mutable).offset(p, s, q), voxelShape, BooleanBiFunction.AND)) continue;
-                    if (blockState.getFluidState().isIn(FluidTags.WATER)) {
+                    if (this.shouldFloatIn(blockState.getFluidState())) {
                         f += 1f;
                     }
                     f += blockState.getBlock().getSlipperiness();
@@ -430,7 +448,7 @@ public class ShieldboardEntity extends Entity {
                 for (int q = m; q < n; ++q) {
                     mutable.set(o, p, q);
                     FluidState fluidState = this.getWorld().getFluidState(mutable);
-                    if (!fluidState.isIn(FluidTags.WATER)) continue;
+                    if (!this.shouldFloatIn(fluidState)) continue;
                     float f = (float)p + fluidState.getHeight(this.getWorld(), mutable);
                     this.waterLevel = Math.max(f, this.waterLevel);
                     bl |= box.minY < (double)f;
@@ -457,7 +475,7 @@ public class ShieldboardEntity extends Entity {
                 for (int q = m; q < n; ++q) {
                     mutable.set(o, p, q);
                     FluidState fluidState = this.getWorld().getFluidState(mutable);
-                    if (!fluidState.isIn(FluidTags.WATER) || !(d < (double)((float)mutable.getY() + fluidState.getHeight(this.getWorld(), mutable)))) continue;
+                    if (!this.shouldFloatIn(fluidState) || !(d < (double)((float)mutable.getY() + fluidState.getHeight(this.getWorld(), mutable)))) continue;
                     if (fluidState.isStill()) {
                         bl = true;
                         continue;

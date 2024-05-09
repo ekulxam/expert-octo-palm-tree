@@ -7,16 +7,13 @@ import net.minecraft.item.ItemStack;
 import survivalblock.shield_surf.common.util.ShieldSurfUtil;
 
 public class ShieldSurfingEnchantment extends Enchantment {
-    private int minLevel;
-    private int maxLevel;
+    private final int maxLevel;
     public ShieldSurfingEnchantment(Rarity weight, EnchantmentTarget type, EquipmentSlot... slotTypes) {
         super(weight, type, slotTypes);
-        this.minLevel = 1;
         this.maxLevel = 1;
     }
-    public ShieldSurfingEnchantment(int minLevel, int maxLevel, Rarity weight, EnchantmentTarget type, EquipmentSlot... slotTypes) {
+    public ShieldSurfingEnchantment(int maxLevel, Rarity weight, EnchantmentTarget type, EquipmentSlot... slotTypes) {
         super(weight, type, slotTypes);
-        this.minLevel = minLevel;
         this.maxLevel = maxLevel;
     }
 
@@ -30,9 +27,10 @@ public class ShieldSurfingEnchantment extends Enchantment {
         return super.canAccept(other) && ShieldSurfUtil.cancelShieldEnchantments(this, other);
     }
 
+    @SuppressWarnings("RedundantMethodOverride")
     @Override
     public int getMinLevel() {
-        return this.minLevel;
+        return 1;
     }
 
     @Override

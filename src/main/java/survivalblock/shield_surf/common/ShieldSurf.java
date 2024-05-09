@@ -12,14 +12,14 @@ import survivalblock.shield_surf.common.init.ShieldSurfSoundEvents;
 
 public class ShieldSurf implements ModInitializer {
 	public static final String MOD_ID = "shield_surf";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger("Shield_Surf");
 
 	@Override
 	public void onInitialize() {
+		MidnightConfig.init(MOD_ID, ShieldSurfConfig.class);
 		ShieldSurfEnchantments.init();
 		ShieldSurfEntityTypes.init();
 		ShieldSurfSoundEvents.init();
-		MidnightConfig.init(MOD_ID, ShieldSurfConfig.class);
 	}
 
 	public static Identifier id(String value) {
