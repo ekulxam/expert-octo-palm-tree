@@ -13,5 +13,7 @@ public class ShieldSurfClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		EntityRendererRegistry.register(ShieldSurfEntityTypes.SHIELDBOARD, ShieldboardEntityRenderer::new);
 		EntityRendererRegistry.register(ShieldSurfEntityTypes.PROJECTED_SHIELD, ProjectedShieldEntityRenderer::new);
+
+
 	}
 }
