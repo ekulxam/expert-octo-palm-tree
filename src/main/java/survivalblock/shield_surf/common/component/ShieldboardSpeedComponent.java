@@ -34,8 +34,12 @@ public class ShieldboardSpeedComponent implements AutoSyncedComponent {
         return this.currentBaseSpeed;
     }
 
+    public double getMaxBaseSpeed() {
+        return ShieldboardEntity.MAX_SPEED + (EnchantmentHelper.getLevel(ShieldSurfEnchantments.SHIELD_SURF, this.obj.asItemStack()) * 0.1);
+    }
+
     public void setCurrentBaseSpeed(double currentBaseSpeed) {
-        double maxSpeed = ShieldboardEntity.MAX_SPEED + (EnchantmentHelper.getLevel(ShieldSurfEnchantments.SHIELD_SURF, this.obj.asItemStack()) * 0.1);
+        double maxSpeed = this.getMaxBaseSpeed();
         this.currentBaseSpeed = MathHelper.clamp(currentBaseSpeed, -maxSpeed, maxSpeed);
         ShieldSurfEntityComponents.SHIELDBOARD_SPEED.sync(this.obj);
     }

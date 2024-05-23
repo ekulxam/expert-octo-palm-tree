@@ -63,8 +63,9 @@ public class ShieldboardEntity extends Entity {
         this.setPos(rider.getX(), rider.getY(), rider.getZ());
         this.lastLocation = BoatEntity.Location.IN_AIR;
         this.location = BoatEntity.Location.IN_WATER;
-        this.getShieldboardSpeedComponent().setCurrentBaseSpeed(rider.getMovementSpeed());
-        this.getShieldboardSpeedComponent().setWasFlying(false);
+        ShieldboardSpeedComponent shieldboardSpeedComponent = this.getShieldboardSpeedComponent();
+        shieldboardSpeedComponent.setCurrentBaseSpeed(rider.getMovementSpeed());
+        shieldboardSpeedComponent.setWasFlying(false);
         this.setYaw(rider.getYaw());
         this.setStepHeight(0.6f);
     }
@@ -285,22 +286,25 @@ public class ShieldboardEntity extends Entity {
             return;
         }
         LivingEntity controller = this.getControllingPassenger();
-        if (controller != null && Math.abs(this.getShieldboardSpeedComponent().getCurrentBaseSpeed()) < (MAX_SPEED / 2) && !(controller instanceof PlayerEntity)) {
+        ShieldboardSpeedComponent shieldboardSpeedComponent = this.getShieldboardSpeedComponent();
+        double currentBaseSpeed = shieldboardSpeedComponent.getCurrentBaseSpeed();
+        if (controller != null && Math.abs(currentBaseSpeed) < (shieldboardSpeedComponent.getMaxBaseSpeed() / 2) && !(controller instanceof PlayerEntity)) {
             this.setInputs(false, false, true, false);
         }
         this.velocityDirty = true;
         double speed;
+        double maxSpeed = shieldboardSpeedComponent.getMaxBaseSpeed();
         @SuppressWarnings("SpellCheckingInspection") final double celeration = 0.004; // lol
         if (this.shouldAccelerateForward || this.shouldGoBackward || this.shouldTurnRight || this.shouldTurnLeft) {
-            speed = MathHelper.clamp(this.getShieldboardSpeedComponent().getCurrentBaseSpeed() + (celeration * (this.location == BoatEntity.Location.IN_AIR && this.lastLocation == BoatEntity.Location.IN_AIR ? 1.5 : 1)), -MAX_SPEED, MAX_SPEED); // speed of board (in blocks/sec) in air is equivalent to speed * 20
+            speed = MathHelper.clamp(currentBaseSpeed + (celeration * (this.location == BoatEntity.Location.IN_AIR && this.lastLocation == BoatEntity.Location.IN_AIR ? 1.5 : 1)), -maxSpeed, maxSpeed); // speed of board (in blocks/sec) in air is equivalent to speed * 20
         } else {
-            if (Math.abs(this.getShieldboardSpeedComponent().getCurrentBaseSpeed()) <= 0.04) {
+            if (Math.abs(currentBaseSpeed) <= 0.04) {
                 speed = 0;
             } else {
-                speed = MathHelper.clamp(this.getShieldboardSpeedComponent().getCurrentBaseSpeed() + (celeration * (this.getShieldboardSpeedComponent().getCurrentBaseSpeed() >= 0 ? -1 : 1) * (this.horizontalCollision ? (this.getNearbySlipperiness() > 0.6 ? 2 : 8) : 1)), -MAX_SPEED, MAX_SPEED);
+                speed = MathHelper.clamp(currentBaseSpeed + (celeration * (currentBaseSpeed >= 0 ? -1 : 1) * (this.horizontalCollision ? (this.getNearbySlipperiness() > 0.6 ? 2 : 8) : 1)), -maxSpeed, maxSpeed);
             }
         }
-        this.getShieldboardSpeedComponent().setCurrentBaseSpeed(speed);
+        shieldboardSpeedComponent.setCurrentBaseSpeed(speed);
         if (this.getNearbySlipperiness() > 0) {
             speed *= (1 + this.getNearbySlipperiness());
         }
@@ -310,7 +314,7 @@ public class ShieldboardEntity extends Entity {
         }
         yVelocity += this.shouldGetOutOfBlock() ? this.location == BoatEntity.Location.ON_LAND && this.lastLocation == BoatEntity.Location.ON_LAND ? this.soulSandStuck() : 0.095 : 0;
         this.setVelocity(MathHelper.sin(-this.getYaw() * ((float) Math.PI / 180)) * speed, yVelocity, MathHelper.cos(this.getYaw() * ((float) Math.PI / 180)) * speed);
-        if (this.getShieldboardSpeedComponent().getWasFlying() && this.flyingUp) this.setVelocity(this.getVelocity().x, Math.max(0.5, this.getVelocity().y), this.getVelocity().z);
+        if (shieldboardSpeedComponent.getWasFlying() && this.flyingUp) this.setVelocity(this.getVelocity().x, Math.max(0.5, this.getVelocity().y), this.getVelocity().z);
         this.velocityModified = true;
     }
 
@@ -557,7 +561,8 @@ public class ShieldboardEntity extends Entity {
 
     @Override
     public boolean shouldSpawnSprintingParticles() {
-        boolean hasEnoughSpeed = Math.abs(this.getShieldboardSpeedComponent().getCurrentBaseSpeed()) > (MAX_SPEED / 2);
+        ShieldboardSpeedComponent shieldboardSpeedComponent = this.getShieldboardSpeedComponent();
+        boolean hasEnoughSpeed = Math.abs(shieldboardSpeedComponent.getCurrentBaseSpeed()) > (shieldboardSpeedComponent.getMaxBaseSpeed() / 2);
         LivingEntity controller = this.getControllingPassenger();
         return !this.isInLava() && this.isAlive() && !this.isTouchingWater() && controller != null && !controller.shouldSpawnSprintingParticles() && hasEnoughSpeed && !this.horizontalCollision;
     }
