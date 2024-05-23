@@ -13,12 +13,13 @@ import survivalblock.shield_surf.common.init.ShieldSurfSoundEvents;
 
 public class ShieldSurf implements ModInitializer {
 	public static final String MOD_ID = "shield_surf";
+	public static final String FABRIC_SHIELD_LIB_ID = "fabricshieldlib";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Shield_Surf");
 	public static boolean hasFabricShieldLib = false;
 
 	@Override
 	public void onInitialize() {
-		hasFabricShieldLib = FabricLoader.getInstance().isModLoaded("fabricshieldlib");
+		hasFabricShieldLib = FabricLoader.getInstance().isModLoaded(FABRIC_SHIELD_LIB_ID);
 		MidnightConfig.init(MOD_ID, ShieldSurfConfig.class);
 		ShieldSurfEnchantments.init();
 		ShieldSurfEntityTypes.init();

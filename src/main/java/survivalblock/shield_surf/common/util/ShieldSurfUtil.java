@@ -1,5 +1,6 @@
 package survivalblock.shield_surf.common.util;
 
+import com.github.crimsondawn45.fabricshieldlib.lib.object.FabricShieldItem;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.RenderLayer;
@@ -10,11 +11,22 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.stat.Stats;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import survivalblock.shield_surf.access.ExpulsionDamageAccess;
 import survivalblock.shield_surf.common.ShieldSurf;
+import survivalblock.shield_surf.common.ShieldSurfConfig;
 import survivalblock.shield_surf.common.compat.SurfingFabricShieldLib;
+import survivalblock.shield_surf.common.component.ShieldSatellitesComponent;
 import survivalblock.shield_surf.common.enchantment.ShieldSurfingEnchantment;
+import survivalblock.shield_surf.common.entity.ProjectedShieldEntity;
+import survivalblock.shield_surf.common.entity.ShieldboardEntity;
 import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
+import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
 
 public class ShieldSurfUtil {
 
@@ -53,16 +65,62 @@ public class ShieldSurfUtil {
         return !(other instanceof ShieldSurfingEnchantment) || other == original;
     }
 
-    public static RenderLayer getOrbitingShieldsRenderLayer(boolean showBody, boolean translucent, boolean showOutline, Identifier texture, Model model) {
-        if (showOutline) {
-            return RenderLayer.getOutline(texture);
+    public static void rideTheLightning(World world, PlayerEntity user, Item item, ItemStack stack) {
+        if(!world.isClient() && EnchantmentHelper.getLevel(ShieldSurfEnchantments.SHIELD_SURF, stack) > 0 && !user.isSneaking()){
+            user.incrementStat(Stats.USED.getOrCreateStat(item));
+            ShieldboardEntity shieldboard = new ShieldboardEntity(world, user, stack);
+            if (user instanceof ServerPlayerEntity player) ShieldSurfEntityComponents.SHIELDBOARD_SPEED.get(shieldboard).setWasFlying(player.getAbilities().flying);
+            world.spawnEntity(shieldboard);
+            user.getInventory().removeOne(stack);
+            user.startRiding(shieldboard, true);
         }
-        if (translucent) {
-            return null;
+    }
+
+    public static void shieldcast(World world, PlayerEntity user, Hand hand, Item item, ItemStack stack){
+        int expulsionLevel = EnchantmentHelper.getLevel(ShieldSurfEnchantments.EXPULSION, stack);
+        if (world.isClient() || expulsionLevel <= 0 || !user.isSneaking()) {
+            return;
         }
-        if (showBody) {
-            return model.getLayer(texture);
+        float damage = ((ExpulsionDamageAccess) user).enchancement_unbound$getExpulsionAttackDamage();
+        if (damage * 2 <= 100){
+            damage *= 2;
+        } else if (damage < 100) {
+            damage = 100;
         }
-        return null;
+        try {
+            ProjectedShieldEntity projectedShield;
+            for (float i = 0; i < 360; i += 360 / (float) (expulsionLevel * ShieldSurfConfig.expulsionMultiplier)) {
+                projectedShield = new ProjectedShieldEntity(world, user, stack);
+                projectedShield.setYaw(i + user.getYaw());
+                world.spawnEntity(projectedShield);
+                projectedShield.setVelocity(user, projectedShield.getPitch(), projectedShield.getYaw(), 0.0f, 0.3f, 0.0f);
+                Vec3d velocity = projectedShield.getVelocity();
+                projectedShield.setVelocity(velocity.x, Math.max(-0.1, velocity.y), velocity.z);
+                projectedShield.setDamage(Math.max(damage, 4));
+            }
+            damageAndIncrement(user, hand, item, stack, 2, 200);
+        } catch (Exception e) {
+            ShieldSurf.LOGGER.error("An exception occurred while trying to summon a Projected Shield", e);
+        }
+    }
+
+    public static void solarSystem(World world, PlayerEntity user, Hand hand, Item item, ItemStack stack) {
+        if (world.isClient() || EnchantmentHelper.getLevel(ShieldSurfEnchantments.ORBIT, stack) <= 0) {
+            return;
+        }
+        ShieldSatellitesComponent satellitesComponent = ShieldSurfEntityComponents.SHIELD_SATELLITES.get(user);
+        if (satellitesComponent.getSatellites() + 1 > ShieldSatellitesComponent.maxSatellites) {
+            return;
+        }
+        damageAndIncrement(user, hand, item, stack, 3, 80);
+    }
+
+    private static void damageAndIncrement(PlayerEntity user, Hand hand, Item item, ItemStack stack, int damage, int ticks) {
+        if (!user.isCreative()) {
+            stack.damage(damage, user, (p) -> p.sendToolBreakStatus(hand));
+            user.getItemCooldownManager().set(item, ticks);
+            user.stopUsingItem();
+        }
+        user.incrementStat(Stats.USED.getOrCreateStat(item));
     }
 }

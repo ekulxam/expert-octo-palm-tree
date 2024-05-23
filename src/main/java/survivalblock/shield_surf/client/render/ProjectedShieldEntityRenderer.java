@@ -14,7 +14,7 @@ import net.minecraft.util.math.RotationAxis;
 import survivalblock.shield_surf.access.RenderHandleSometimesAccess;
 import survivalblock.shield_surf.common.ShieldSurfConfig;
 import survivalblock.shield_surf.common.entity.ProjectedShieldEntity;
-import survivalblock.shield_surf.mixin.shieldsurf.client.ItemRendererAccessor;
+import survivalblock.shield_surf.mixin.vanilla.shieldsurf.client.ItemRendererAccessor;
 
 public class ProjectedShieldEntityRenderer extends EntityRenderer<ProjectedShieldEntity> {
 

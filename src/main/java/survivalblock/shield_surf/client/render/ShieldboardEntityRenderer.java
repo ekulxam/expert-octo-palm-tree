@@ -15,7 +15,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 import survivalblock.shield_surf.access.RenderHandleSometimesAccess;
 import survivalblock.shield_surf.common.entity.ShieldboardEntity;
-import survivalblock.shield_surf.mixin.shieldsurf.client.ItemRendererAccessor;
+import survivalblock.shield_surf.mixin.vanilla.shieldsurf.client.ItemRendererAccessor;
 
 @Environment(value= EnvType.CLIENT)
 public class ShieldboardEntityRenderer extends EntityRenderer<ShieldboardEntity> {

@@ -2,26 +2,30 @@
   "required": true,
   "package": "survivalblock.shield_surf.mixin",
   "compatibilityLevel": "JAVA_17",
+  "plugin": "survivalblock.shield_surf.common.compat.ShieldSurfMixinPlugin",
   "mixins": [
-    "aegis.LivingEntityMixin",
-    "aegis.PlayerEntityMixin",
-    "expulsion.LivingEntityMixin",
-    "expulsion.ShieldItemMixin",
-    "orbit.PlayerEntityMixin",
-    "orbit.ShieldItemMixin",
-    "shieldsurf.ServerPlayNetworkHandlerMixin",
-    "shieldsurf.ShieldItemMixin",
-    "vanillachanges.enchantableshields.EnchantmentHelperMixin",
-    "vanillachanges.enchantableshields.ItemMixin",
-    "vanillachanges.enchantableshields.ShieldItemMixin"
+    "fabricshieldlib.expulsion.FabricShieldItemMixin",
+    "fabricshieldlib.orbit.FabricShieldItemMixin",
+    "fabricshieldlib.shieldsurf.FabricShieldItemMixin",
+    "vanilla.aegis.LivingEntityMixin",
+    "vanilla.aegis.PlayerEntityMixin",
+    "vanilla.expulsion.LivingEntityMixin",
+    "vanilla.expulsion.ShieldItemMixin",
+    "vanilla.orbit.PlayerEntityMixin",
+    "vanilla.orbit.ShieldItemMixin",
+    "vanilla.shieldsurf.ServerPlayNetworkHandlerMixin",
+    "vanilla.shieldsurf.ShieldItemMixin",
+    "vanilla.vanillachanges.enchantableshields.EnchantmentHelperMixin",
+    "vanilla.vanillachanges.enchantableshields.ItemMixin",
+    "vanilla.vanillachanges.enchantableshields.ShieldItemMixin"
   ],
   "client": [
-    "orbit.client.PlayerEntityRendererMixin",
-    "rapid.ClientPlayerEntityMixin",
-    "shieldsurf.client.BipedEntityModelMixin",
-    "shieldsurf.client.BuiltinModelItemRendererMixin",
-    "shieldsurf.client.ClientPlayerEntityMixin",
-    "shieldsurf.client.ItemRendererAccessor"
+    "vanilla.orbit.client.PlayerEntityRendererMixin",
+    "vanilla.rapid.ClientPlayerEntityMixin",
+    "vanilla.shieldsurf.client.BipedEntityModelMixin",
+    "vanilla.shieldsurf.client.BuiltinModelItemRendererMixin",
+    "vanilla.shieldsurf.client.ClientPlayerEntityMixin",
+    "vanilla.shieldsurf.client.ItemRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
