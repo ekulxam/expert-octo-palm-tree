@@ -1,12 +1,11 @@
 package survivalblock.shield_surf.common.component;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.math.MathHelper;
 import survivalblock.shield_surf.common.entity.ShieldboardEntity;
+import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
 
 public class ShieldboardSpeedComponent implements AutoSyncedComponent {
@@ -36,7 +35,8 @@ public class ShieldboardSpeedComponent implements AutoSyncedComponent {
     }
 
     public void setCurrentBaseSpeed(double currentBaseSpeed) {
-        this.currentBaseSpeed = MathHelper.clamp(currentBaseSpeed, -ShieldboardEntity.maxSpeed, ShieldboardEntity.maxSpeed);
+        double maxSpeed = ShieldboardEntity.MAX_SPEED + (EnchantmentHelper.getLevel(ShieldSurfEnchantments.SHIELD_SURF, this.obj.asItemStack()) * 0.1);
+        this.currentBaseSpeed = MathHelper.clamp(currentBaseSpeed, -maxSpeed, maxSpeed);
         ShieldSurfEntityComponents.SHIELDBOARD_SPEED.sync(this.obj);
     }
 

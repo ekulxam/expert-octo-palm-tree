@@ -11,6 +11,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
+import survivalblock.shield_surf.common.ShieldSurf;
+import survivalblock.shield_surf.common.compat.SurfingFabricShieldLib;
 import survivalblock.shield_surf.common.enchantment.ShieldSurfingEnchantment;
 import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
 
@@ -44,7 +46,7 @@ public class ShieldSurfUtil {
     }
 
     public static boolean isAShield(ItemStack stack){
-        return stack.isIn(ConventionalItemTags.SHIELDS) || stack.isOf(Items.SHIELD);
+        return stack.isIn(ConventionalItemTags.SHIELDS) || stack.isOf(Items.SHIELD) || (ShieldSurf.hasFabricShieldLib && SurfingFabricShieldLib.isAFabricShield(stack));
     }
 
     public static boolean cancelShieldEnchantments(Enchantment original, Enchantment other){

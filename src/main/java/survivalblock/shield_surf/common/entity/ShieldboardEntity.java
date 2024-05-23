@@ -15,7 +15,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.*;
 import net.minecraft.util.shape.VoxelShape;
@@ -42,7 +41,7 @@ public class ShieldboardEntity extends Entity {
     private boolean shouldTurnLeft;
     private boolean shouldTurnRight;
     private boolean flyingUp;
-    public static final double maxSpeed = 0.7;
+    public static final double MAX_SPEED = 0.4;
 
     public ShieldboardEntity(EntityType<?> type, World world) {
         super(type, world);
@@ -286,19 +285,19 @@ public class ShieldboardEntity extends Entity {
             return;
         }
         LivingEntity controller = this.getControllingPassenger();
-        if (controller != null && Math.abs(this.getShieldboardSpeedComponent().getCurrentBaseSpeed()) < (maxSpeed / 2) && !(controller instanceof PlayerEntity)) {
+        if (controller != null && Math.abs(this.getShieldboardSpeedComponent().getCurrentBaseSpeed()) < (MAX_SPEED / 2) && !(controller instanceof PlayerEntity)) {
             this.setInputs(false, false, true, false);
         }
         this.velocityDirty = true;
         double speed;
         @SuppressWarnings("SpellCheckingInspection") final double celeration = 0.004; // lol
         if (this.shouldAccelerateForward || this.shouldGoBackward || this.shouldTurnRight || this.shouldTurnLeft) {
-            speed = MathHelper.clamp(this.getShieldboardSpeedComponent().getCurrentBaseSpeed() + (celeration * (this.location == BoatEntity.Location.IN_AIR && this.lastLocation == BoatEntity.Location.IN_AIR ? 1.5 : 1)), -maxSpeed, maxSpeed); // speed of board (in blocks/sec) in air is equivalent to speed * 20
+            speed = MathHelper.clamp(this.getShieldboardSpeedComponent().getCurrentBaseSpeed() + (celeration * (this.location == BoatEntity.Location.IN_AIR && this.lastLocation == BoatEntity.Location.IN_AIR ? 1.5 : 1)), -MAX_SPEED, MAX_SPEED); // speed of board (in blocks/sec) in air is equivalent to speed * 20
         } else {
             if (Math.abs(this.getShieldboardSpeedComponent().getCurrentBaseSpeed()) <= 0.04) {
                 speed = 0;
             } else {
-                speed = MathHelper.clamp(this.getShieldboardSpeedComponent().getCurrentBaseSpeed() + (celeration * (this.getShieldboardSpeedComponent().getCurrentBaseSpeed() >= 0 ? -1 : 1) * (this.horizontalCollision ? (this.getNearbySlipperiness() > 0.6 ? 2 : 8) : 1)), -maxSpeed, maxSpeed);
+                speed = MathHelper.clamp(this.getShieldboardSpeedComponent().getCurrentBaseSpeed() + (celeration * (this.getShieldboardSpeedComponent().getCurrentBaseSpeed() >= 0 ? -1 : 1) * (this.horizontalCollision ? (this.getNearbySlipperiness() > 0.6 ? 2 : 8) : 1)), -MAX_SPEED, MAX_SPEED);
             }
         }
         this.getShieldboardSpeedComponent().setCurrentBaseSpeed(speed);
@@ -558,7 +557,7 @@ public class ShieldboardEntity extends Entity {
 
     @Override
     public boolean shouldSpawnSprintingParticles() {
-        boolean hasEnoughSpeed = Math.abs(this.getShieldboardSpeedComponent().getCurrentBaseSpeed()) > (maxSpeed / 2);
+        boolean hasEnoughSpeed = Math.abs(this.getShieldboardSpeedComponent().getCurrentBaseSpeed()) > (MAX_SPEED / 2);
         LivingEntity controller = this.getControllingPassenger();
         return !this.isInLava() && this.isAlive() && !this.isTouchingWater() && controller != null && !controller.shouldSpawnSprintingParticles() && hasEnoughSpeed && !this.horizontalCollision;
     }

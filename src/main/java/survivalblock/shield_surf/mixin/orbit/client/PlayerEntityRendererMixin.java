@@ -36,16 +36,16 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
         MinecraftClient client = MinecraftClient.getInstance();
         boolean translucent = !showBody /*&& !player.isInvisibleTo(client.player)*/;
         boolean showOutline = client.hasOutline(player);
+        ShieldSatellitesComponent satellitesComponent = ShieldSurfEntityComponents.SHIELD_SATELLITES.get(player);
+        int satellites = satellitesComponent.getSatellites();
+        if (satellites <= 0 || satellitesComponent.getItemStacksSize() <= 0) {
+            return;
+        }
         RenderLayer layer = ShieldSurfUtil.getOrbitingShieldsRenderLayer(showBody, translucent, showOutline, this.getTexture(player), this.model);
         if (!showBody) {
             if (layer == null) return;
             VertexConsumerProvider finalVertexConsumerProvider = vertexConsumerProvider;
             vertexConsumerProvider = (layer1 -> finalVertexConsumerProvider.getBuffer(layer));
-        }
-        ShieldSatellitesComponent satellitesComponent = ShieldSurfEntityComponents.SHIELD_SATELLITES.get(player);
-        int satellites = satellitesComponent.getSatellites();
-        if (satellites <= 0 || satellitesComponent.getItemStacksSize() <= 0) {
-            return;
         }
         int overlay = OverlayTexture.DEFAULT_UV;
         for (float i = 0; i < 360; i += 360 / (float) satellites) {
