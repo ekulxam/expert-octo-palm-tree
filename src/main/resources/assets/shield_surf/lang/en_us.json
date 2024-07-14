@@ -18,9 +18,9 @@
   "enchantment.shield_surf.orbit.desc": "Using the shield will summon a shield satellite that will orbit around the player. The shield satellite will block any entity-based damage only once before breaking.",
   "shield_surf.midnightconfig.title": "Shield Surfing Config",
   "shield_surf.midnightconfig.category.client": "Client",
-  "shield_surf.midnightconfig.expulsionMultiplier": "Expulsion Projectile Multiplier",
+  "gamerule.shieldSurfExpulsionMultiplier": "Shield Surf - Expulsion Projectile Multiplier",
   "shield_surf.midnightconfig.projectedShieldsRenderOutwards": "Projected Shields Render Outwards",
-  "shield_surf.midnightconfig.projectedShieldsRenderWithHandle": "Projected Shields Render With handle",
+  "shield_surf.midnightconfig.projectedShieldsRenderWithHandle": "Projected Shields Render With Handle",
   "shield_surf.midnightconfig.orbitingShieldsFlattenWhileSwimming": "Orbiting Shields Render Sideways When The Player's Height Is At Most One",
   "shield_surf.midnightconfig.orbitingShieldsRotateClockwise": "Orbiting Shields Rotate Clockwise Around Their Origin"
 }

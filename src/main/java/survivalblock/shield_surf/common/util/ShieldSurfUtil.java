@@ -1,9 +1,6 @@
 package survivalblock.shield_surf.common.util;
 
-import com.github.crimsondawn45.fabricshieldlib.lib.object.FabricShieldItem;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -14,7 +11,6 @@ import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import survivalblock.shield_surf.access.ExpulsionDamageAccess;
@@ -27,6 +23,7 @@ import survivalblock.shield_surf.common.entity.ProjectedShieldEntity;
 import survivalblock.shield_surf.common.entity.ShieldboardEntity;
 import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
+import survivalblock.shield_surf.common.init.ShieldSurfGameRules;
 
 public class ShieldSurfUtil {
 
@@ -89,7 +86,8 @@ public class ShieldSurfUtil {
         }
         try {
             ProjectedShieldEntity projectedShield;
-            for (float i = 0; i < 360; i += 360 / (float) (expulsionLevel * ShieldSurfConfig.expulsionMultiplier)) {
+            int multiplier = world.getGameRules().getInt(ShieldSurfGameRules.EXPULSION_MULTIPLIER);
+            for (float i = 0; i < 360; i += 360 / (float) (expulsionLevel * multiplier)) {
                 projectedShield = new ProjectedShieldEntity(world, user, stack);
                 projectedShield.setYaw(i + user.getYaw());
                 world.spawnEntity(projectedShield);
@@ -98,7 +96,7 @@ public class ShieldSurfUtil {
                 projectedShield.setVelocity(velocity.x, Math.max(-0.1, velocity.y), velocity.z);
                 projectedShield.setDamage(Math.max(damage, 4));
             }
-            damageAndIncrement(user, hand, item, stack, 2, 200);
+            damageAndIncrementStat(user, hand, item, stack, 2, 200);
         } catch (Exception e) {
             ShieldSurf.LOGGER.error("An exception occurred while trying to summon a Projected Shield", e);
         }
@@ -112,13 +110,14 @@ public class ShieldSurfUtil {
         if (satellitesComponent.getSatellites() + 1 > ShieldSatellitesComponent.maxSatellites) {
             return;
         }
-        damageAndIncrement(user, hand, item, stack, 3, 80);
+        satellitesComponent.addSatellite(stack);
+        damageAndIncrementStat(user, hand, item, stack, 3, 80);
     }
 
-    private static void damageAndIncrement(PlayerEntity user, Hand hand, Item item, ItemStack stack, int damage, int ticks) {
+    private static void damageAndIncrementStat(PlayerEntity user, Hand hand, Item item, ItemStack stack, int damage, int cooldown) {
         if (!user.isCreative()) {
             stack.damage(damage, user, (p) -> p.sendToolBreakStatus(hand));
-            user.getItemCooldownManager().set(item, ticks);
+            user.getItemCooldownManager().set(item, cooldown);
             user.stopUsingItem();
         }
         user.incrementStat(Stats.USED.getOrCreateStat(item));

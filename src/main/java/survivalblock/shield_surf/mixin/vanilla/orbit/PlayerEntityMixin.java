@@ -11,9 +11,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import survivalblock.shield_surf.common.compat.SurfingFabricShieldLib;
 import survivalblock.shield_surf.common.component.ShieldSatellitesComponent;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
 
+@SuppressWarnings({"UnreachableCode", "RedundantCast"})
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
 
@@ -30,6 +32,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             ShieldSatellitesComponent satellitesComponent = ShieldSurfEntityComponents.SHIELD_SATELLITES.get((PlayerEntity) (Object) this);
             if (satellitesComponent.getSatellites() > 0) {
                 cir.setReturnValue(false);
+                SurfingFabricShieldLib.invokeOrbitBlock(this, source, amount, satellitesComponent.getStack(0));
                 satellitesComponent.removeSatellite();
             }
         }

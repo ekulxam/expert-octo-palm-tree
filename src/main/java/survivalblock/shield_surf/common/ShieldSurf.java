@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityTypes;
+import survivalblock.shield_surf.common.init.ShieldSurfGameRules;
 import survivalblock.shield_surf.common.init.ShieldSurfSoundEvents;
 
 public class ShieldSurf implements ModInitializer {
@@ -19,14 +20,21 @@ public class ShieldSurf implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		hasFabricShieldLib = FabricLoader.getInstance().isModLoaded(FABRIC_SHIELD_LIB_ID);
+		resetHasFabricShieldLib();
 		MidnightConfig.init(MOD_ID, ShieldSurfConfig.class);
 		ShieldSurfEnchantments.init();
 		ShieldSurfEntityTypes.init();
 		ShieldSurfSoundEvents.init();
+		ShieldSurfGameRules.init();
 	}
 
 	public static Identifier id(String value) {
 		return new Identifier(MOD_ID, value);
+	}
+
+	@SuppressWarnings("UnusedReturnValue")
+    public static boolean resetHasFabricShieldLib() {
+		hasFabricShieldLib = FabricLoader.getInstance().isModLoaded(FABRIC_SHIELD_LIB_ID);
+		return hasFabricShieldLib;
 	}
 }

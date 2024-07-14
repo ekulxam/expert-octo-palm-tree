@@ -4,8 +4,11 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "survivalblock.shield_surf.common.compat.ShieldSurfMixinPlugin",
   "mixins": [
+    "fabricshieldlib.expulsion.FabricBannerShieldItemMixin",
     "fabricshieldlib.expulsion.FabricShieldItemMixin",
+    "fabricshieldlib.orbit.FabricBannerShieldItemMixin",
     "fabricshieldlib.orbit.FabricShieldItemMixin",
+    "fabricshieldlib.shieldsurf.FabricBannerShieldItemMixin",
     "fabricshieldlib.shieldsurf.FabricShieldItemMixin",
     "vanilla.aegis.LivingEntityMixin",
     "vanilla.aegis.PlayerEntityMixin",

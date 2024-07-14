@@ -54,6 +54,7 @@ public class ShieldSatellitesComponent implements AutoSyncedComponent, CommonTic
     public int getRotation() {
         return this.rotation;
     }
+
     public int getSatellites() {
         return this.satellites;
     }

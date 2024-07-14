@@ -5,7 +5,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 public class ShieldSurfClientUtil {
-    
+
     public static RenderLayer getOrbitingShieldsRenderLayer(boolean showBody, boolean translucent, boolean showOutline, Identifier texture, Model model) {
         if (showOutline) {
             return RenderLayer.getOutline(texture);
