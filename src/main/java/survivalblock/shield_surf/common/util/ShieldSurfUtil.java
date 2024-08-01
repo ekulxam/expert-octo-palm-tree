@@ -66,7 +66,6 @@ public class ShieldSurfUtil {
         if(!world.isClient() && EnchantmentHelper.getLevel(ShieldSurfEnchantments.SHIELD_SURF, stack) > 0 && !user.isSneaking()){
             user.incrementStat(Stats.USED.getOrCreateStat(item));
             ShieldboardEntity shieldboard = new ShieldboardEntity(world, user, stack);
-            if (user instanceof ServerPlayerEntity player) ShieldSurfEntityComponents.SHIELDBOARD_SPEED.get(shieldboard).setWasFlying(player.getAbilities().flying);
             world.spawnEntity(shieldboard);
             user.getInventory().removeOne(stack);
             user.startRiding(shieldboard, true);

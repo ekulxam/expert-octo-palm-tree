@@ -18,7 +18,7 @@ public class ClientPlayerEntityMixin {
     @WrapOperation(method = "tickRiding", constant = @Constant(classValue = BoatEntity.class, ordinal = 0))
     private boolean updateRidingShieldboard(Object obj, Operation<Boolean> original){
         if (obj instanceof ShieldboardEntity shieldboard) {
-            shieldboard.setInputs(this.input.pressingLeft, this.input.pressingRight, this.input.pressingForward, this.input.pressingBack, this.input.jumping);
+            shieldboard.setInputs(this.input.pressingLeft, this.input.pressingRight, this.input.pressingForward, this.input.pressingBack);
         }
         return original.call(obj);
     }

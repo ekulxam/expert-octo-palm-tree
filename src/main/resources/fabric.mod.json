@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "shield_surf",
   "version": "${version}",
-  "name": "Shield Surfing",
+  "name": "Shield Surf",
   "description": "Adds some shield enchantments to Minecraft",
   "authors": [
 	"Survivalblock"
@@ -24,6 +24,9 @@
 	],
     "cardinal-components-entity": [
       "survivalblock.shield_surf.common.init.ShieldSurfEntityComponents"
+    ],
+    "fabric-datagen": [
+      "survivalblock.shield_surf.common.datagen.ShieldSurfDataGenerator"
     ]
   },
   "mixins": [

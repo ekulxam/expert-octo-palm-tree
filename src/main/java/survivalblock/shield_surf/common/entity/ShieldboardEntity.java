@@ -2,10 +2,8 @@ package survivalblock.shield_surf.common.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LilyPadBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MovementType;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
@@ -25,22 +23,26 @@ import org.jetbrains.annotations.Nullable;
 import survivalblock.shield_surf.common.component.ShieldStackComponent;
 import survivalblock.shield_surf.common.component.ShieldboardSpeedComponent;
 import survivalblock.shield_surf.common.init.ShieldSurfDamageTypes;
+import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityTypes;
 
 import java.util.List;
 
-public class ShieldboardEntity extends Entity {
-    private float ticksUnderwater;
-    private double waterLevel;
-    private BoatEntity.Location location;
-    private BoatEntity.Location lastLocation;
-    private double fallVelocity;
+public class ShieldboardEntity extends Entity implements JumpingMount {
+    protected float ticksUnderwater;
+    protected double waterLevel;
+    protected BoatEntity.Location location;
+    protected BoatEntity.Location lastLocation;
+    protected double fallVelocity;
     private boolean shouldAccelerateForward;
     private boolean shouldGoBackward;
     private boolean shouldTurnLeft;
     private boolean shouldTurnRight;
-    private boolean flyingUp;
+    protected boolean jumping;
+    protected float jumpingPower;
+    protected double defaultJumpStrength = 0.4;
+    protected boolean inAir;
     public static final double MAX_SPEED = 0.4;
 
     public ShieldboardEntity(EntityType<?> type, World world) {
@@ -56,29 +58,21 @@ public class ShieldboardEntity extends Entity {
     }
 
     public ShieldboardEntity(World world, LivingEntity rider, ItemStack stack) {
-        super(ShieldSurfEntityTypes.SHIELDBOARD, world);
+        this(ShieldSurfEntityTypes.SHIELDBOARD, world);
         setInputs();
         if (rider.isSprinting()) rider.setSprinting(false);
         this.getShieldStackComponent().setShieldStack(stack.copyWithCount(stack.getCount()));
         this.setPos(rider.getX(), rider.getY(), rider.getZ());
         this.lastLocation = BoatEntity.Location.IN_AIR;
         this.location = BoatEntity.Location.IN_WATER;
-        ShieldboardSpeedComponent shieldboardSpeedComponent = this.getShieldboardSpeedComponent();
-        shieldboardSpeedComponent.setCurrentBaseSpeed(rider.getMovementSpeed());
-        shieldboardSpeedComponent.setWasFlying(false);
         this.setYaw(rider.getYaw());
-        this.setStepHeight(0.6f);
     }
 
     public void setInputs(){
-        this.setInputs(false, false, false, false, false);
+        this.setInputs(false, false, false, false);
     }
 
-    public void setInputs(boolean pressingLeft, boolean pressingRight, boolean pressingForward, boolean pressingBack) {
-        this.setInputs(pressingLeft, pressingRight, pressingForward, pressingBack, false);
-    }
-
-    public void setInputs(boolean pressingLeft, boolean pressingRight, boolean pressingForward, boolean pressingBack, boolean flyingUp){
+    public void setInputs(boolean pressingLeft, boolean pressingRight, boolean pressingForward, boolean pressingBack){
         this.shouldAccelerateForward = pressingForward;
         if (pressingForward) {
             this.shouldGoBackward = false;
@@ -92,7 +86,6 @@ public class ShieldboardEntity extends Entity {
             this.shouldTurnLeft = pressingLeft;
             this.shouldTurnRight = pressingRight;
         }
-        this.flyingUp = flyingUp;
     }
 
     private ShieldStackComponent getShieldStackComponent(){
@@ -314,13 +307,24 @@ public class ShieldboardEntity extends Entity {
         }
         yVelocity += this.shouldGetOutOfBlock() ? this.location == BoatEntity.Location.ON_LAND && this.lastLocation == BoatEntity.Location.ON_LAND ? this.soulSandStuck() : 0.095 : 0;
         this.setVelocity(MathHelper.sin(-this.getYaw() * ((float) Math.PI / 180)) * speed, yVelocity, MathHelper.cos(this.getYaw() * ((float) Math.PI / 180)) * speed);
-        if (shieldboardSpeedComponent.getWasFlying() && this.flyingUp) this.setVelocity(this.getVelocity().x, Math.max(0.5, this.getVelocity().y), this.getVelocity().z);
+        if (this.isOnGround() || this.location == BoatEntity.Location.IN_WATER) {
+            this.setInAir(false);
+            if (this.jumpingPower > 0.0F && !this.isInAir()) {
+                this.jump(this.jumpingPower);
+            }
+            this.jumpingPower = 0.0F;
+        }
+        if (this.isInAir()) {
+            Vec3d current = this.getVelocity();
+            final double airMultiplier = 2.6;
+            this.setVelocity(current.x * airMultiplier, current.y, current.z * airMultiplier);
+        }
         this.velocityModified = true;
     }
 
     private double soulSandStuck(){
         if (Math.abs(this.getY() - Math.round(this.getY())) <= 0.05 || Math.abs(this.getY() - (Math.round(this.getY())) + 0.5) <= 0.05) {
-            return 0; // this is handled by step height so I don't need to do anything
+            return 0; // this is handled by step height, so I don't need to do anything
         }
         double blockHeightAtPos = this.getBlockStateAtPos().getCollisionShape(this.getWorld(), this.getBlockPos()).getMax(Direction.Axis.Y);
         return valueMap(blockHeightAtPos, 0, 1.6, 0, 0.255);
@@ -522,7 +526,7 @@ public class ShieldboardEntity extends Entity {
 
     @Override
     protected Entity.MoveEffect getMoveEffect() {
-        return Entity.MoveEffect.EVENTS;
+        return MoveEffect.EVENTS;
     }
 
     @Override
@@ -565,5 +569,66 @@ public class ShieldboardEntity extends Entity {
         boolean hasEnoughSpeed = Math.abs(shieldboardSpeedComponent.getCurrentBaseSpeed()) > (shieldboardSpeedComponent.getMaxBaseSpeed() / 2);
         LivingEntity controller = this.getControllingPassenger();
         return !this.isInLava() && this.isAlive() && !this.isTouchingWater() && controller != null && !controller.shouldSpawnSprintingParticles() && hasEnoughSpeed && !this.horizontalCollision;
+    }
+
+    public int getEnchantmentLevel(int max) {
+        int level = EnchantmentHelper.getLevel(ShieldSurfEnchantments.SHIELD_SURF, this.asItemStack());
+        if (level < 0) {
+            return 0;
+        }
+        //noinspection ManualMinMaxCalculation
+        if (level > max) {
+            return max;
+        }
+        return level;
+    }
+
+    @Override
+    public void setJumpStrength(int strength) {
+        if (strength < 0) {
+            strength = 0;
+        } else {
+            this.jumping = true;
+        }
+        if (strength >= 90) {
+            this.jumpingPower = 1.0F;
+        } else {
+            this.jumpingPower = 0.4F + 0.4F * (float)strength / 90.0F;
+        }
+    }
+
+    @Override
+    public boolean canJump() {
+        return true;
+    }
+
+    @Override
+    public void startJumping(int height) {
+        this.jumping = true;
+    }
+
+    @Override
+    public void stopJumping() {
+
+    }
+
+    protected void jump(float strength) {
+        double d = this.getJumpStrength() * (double)strength * (double)this.getJumpVelocityMultiplier();
+        Vec3d vec3d = this.getVelocity();
+        this.setVelocity(vec3d.x, d, vec3d.z);
+        this.setInAir(true);
+        this.velocityDirty = true;
+    }
+
+    public double getJumpStrength() {
+        return defaultJumpStrength + getEnchantmentLevel(10) * 0.2;
+    }
+
+    public boolean isInAir() {
+        return this.inAir;
+    }
+
+    public void setInAir(boolean inAir) {
+        this.inAir = inAir;
     }
 }

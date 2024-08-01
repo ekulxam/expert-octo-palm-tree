@@ -33,6 +33,10 @@ repositories {
     }
 }
 
+fabricApi {
+    configureDataGeneration()
+}
+
 dependencies {
     // minecraft and fabric
     minecraft "com.mojang:minecraft:${minecraft_version}"
