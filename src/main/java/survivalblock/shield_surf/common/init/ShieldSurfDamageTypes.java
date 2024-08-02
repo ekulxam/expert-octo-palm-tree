@@ -20,6 +20,10 @@ public class ShieldSurfDamageTypes {
         return world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(key);
     }
 
+    /**
+     * Creates a map with the {@link RegistryKey<DamageType>}s as keys and {@link DamageType}s as values
+     * @return an {@link ImmutableMap}
+     */
     public static ImmutableMap<RegistryKey<DamageType>, DamageType> asDamageTypes() {
         Map<RegistryKey<DamageType>, DamageType> damageTypes = new HashMap<>();
         damageTypes.put(SHIELDBOARD_COLLISION, new DamageType("shield_surf.shieldboard_collision", 0.1F));
