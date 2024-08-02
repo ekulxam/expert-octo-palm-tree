@@ -13,17 +13,16 @@ import net.minecraft.data.DataOutput.PathResolver;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.DataWriter;
 import net.minecraft.entity.damage.DamageType;
-import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.util.Identifier;
 
 public abstract class FabricDamageTypeProvider implements DataProvider {
 
     private final PathResolver path;
     private final String MOD_ID;
-    private final DamageTypeBuilder damageTypes = new DamageTypeBuilder();
-    private final List<String> ids = new ArrayList<>();
+    private final FabricDamageTypesContainer damageTypesContainer = new FabricDamageTypesContainer();
+    private final List<String> filenames = new ArrayList<>();
 
-    protected abstract void addTypeToGenerate(DamageTypeBuilder damageTypes);
+    protected abstract void setup(FabricDamageTypesContainer damageTypesContainer);
 
     public FabricDamageTypeProvider(FabricDataOutput generator) {
         this.path = generator.getResolver(OutputType.DATA_PACK, "damage_type/");
@@ -32,12 +31,12 @@ public abstract class FabricDamageTypeProvider implements DataProvider {
 
     public CompletableFuture<?> run(DataWriter dataWriter) {
         List<CompletableFuture<?>> futures = Lists.newArrayList();
-        addTypeToGenerate(damageTypes);
+        setup(damageTypesContainer);
 
         // modified from https://github.com/Lyinginbedmon/TricksyFoxes/blob/00cfc2bcf17993833db7f8c13f2bfb14913e2ece/src/main/java/com/lying/tricksy/data/TFDamageTypesProvider.java
         // As of writing this on the first of August 2024, Tricksy Foxes is licensed under Creative Commons Zero v1.0 Universal
         // which you can find a copy of at https://github.com/Lyinginbedmon/TricksyFoxes/blob/00cfc2bcf17993833db7f8c13f2bfb14913e2ece/LICENSE
-        damageTypes.forEach(pair -> {
+        damageTypesContainer.forEach(pair -> {
             DamageType type = pair.getSecond();
             JsonObject obj = new JsonObject();
             obj.addProperty("message_id", type.msgId());
@@ -47,10 +46,10 @@ public abstract class FabricDamageTypeProvider implements DataProvider {
             obj.addProperty("death_message_type", type.deathMessageType().asString());
             Identifier id = new Identifier(this.MOD_ID, pair.getFirst());
             String string = id.toString();
-            if (ids.contains(string)) {
+            if (filenames.contains(string)) {
                 throw new IllegalStateException("Duplicate damage type definition for " + id);
             } else {
-                ids.add(string);
+                filenames.add(string);
             }
             futures.add(DataProvider.writeToPath(dataWriter, obj, this.path.resolveJson(id)));
         });

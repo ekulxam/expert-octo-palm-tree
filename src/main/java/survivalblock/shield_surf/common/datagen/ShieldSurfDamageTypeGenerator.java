@@ -7,15 +7,16 @@ import survivalblock.shield_surf.common.init.ShieldSurfDamageTypes;
 
 import java.util.Map;
 
-public class ShieldSurfDamageTypeGenerator extends FabricDamageTypeProvider{
+public class ShieldSurfDamageTypeGenerator extends FabricDamageTypeProvider {
+
     public ShieldSurfDamageTypeGenerator(FabricDataOutput generator) {
         super(generator);
     }
 
     @Override
-    protected void addTypeToGenerate(DamageTypeBuilder damageTypes) {
+    protected void setup(FabricDamageTypesContainer damageTypesContainer) {
         for (Map.Entry<RegistryKey<DamageType>, DamageType> entry : ShieldSurfDamageTypes.asDamageTypes().entrySet()) {
-            damageTypes.add(entry.getKey().getValue().getPath(), entry.getValue());
+            damageTypesContainer.add(entry.getKey().getValue().getPath(), entry.getValue());
         }
     }
 }

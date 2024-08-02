@@ -42,7 +42,7 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
     protected boolean jumping;
     protected float jumpingPower;
     protected double defaultJumpStrength = 0.4;
-    protected boolean inAir;
+    protected boolean inAirForJump;
     public static final double MAX_SPEED = 0.4;
 
     public ShieldboardEntity(EntityType<?> type, World world) {
@@ -308,13 +308,13 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
         yVelocity += this.shouldGetOutOfBlock() ? this.location == BoatEntity.Location.ON_LAND && this.lastLocation == BoatEntity.Location.ON_LAND ? this.soulSandStuck() : 0.095 : 0;
         this.setVelocity(MathHelper.sin(-this.getYaw() * ((float) Math.PI / 180)) * speed, yVelocity, MathHelper.cos(this.getYaw() * ((float) Math.PI / 180)) * speed);
         if (this.isOnGround() || this.location == BoatEntity.Location.IN_WATER) {
-            this.setInAir(false);
-            if (this.jumpingPower > 0.0F && !this.isInAir()) {
+            this.setInAirForJump(false);
+            if (this.jumpingPower > 0.0F && !this.isInAirForJump()) {
                 this.jump(this.jumpingPower);
             }
             this.jumpingPower = 0.0F;
         }
-        if (this.isInAir()) {
+        if (this.isInAirForJump()) {
             Vec3d current = this.getVelocity();
             final double airMultiplier = 2.6;
             this.setVelocity(current.x * airMultiplier, current.y, current.z * airMultiplier);
@@ -616,7 +616,7 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
         double d = this.getJumpStrength() * (double)strength * (double)this.getJumpVelocityMultiplier();
         Vec3d vec3d = this.getVelocity();
         this.setVelocity(vec3d.x, d, vec3d.z);
-        this.setInAir(true);
+        this.setInAirForJump(true);
         this.velocityDirty = true;
     }
 
@@ -624,11 +624,11 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
         return defaultJumpStrength + getEnchantmentLevel(10) * 0.2;
     }
 
-    public boolean isInAir() {
-        return this.inAir;
+    public boolean isInAirForJump() {
+        return this.inAirForJump;
     }
 
-    public void setInAir(boolean inAir) {
-        this.inAir = inAir;
+    public void setInAirForJump(boolean value) {
+        this.inAirForJump = value;
     }
 }

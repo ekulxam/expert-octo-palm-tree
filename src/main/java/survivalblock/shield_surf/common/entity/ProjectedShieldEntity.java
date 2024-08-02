@@ -46,13 +46,10 @@ public class ProjectedShieldEntity extends PersistentProjectileEntity {
     @Override
     public void tick() {
         boolean ownerDoesNotExist = this.getOwner() == null || this.getOwner().isRemoved(); // same as !this.getOwner().isAlive()
-        if (this.age > 120 || ownerDoesNotExist) {
+        if ((this.age > 120 || ownerDoesNotExist || this.isInsideWall()) && !this.getWorld().isClient()) {
             this.kill();
         }
         super.tick();
-        if (this.isInsideWall()){
-            this.kill();
-        }
     }
 
     @Override
@@ -64,9 +61,6 @@ public class ProjectedShieldEntity extends PersistentProjectileEntity {
         }
         DamageSource damageSource = new DamageSource(ShieldSurfDamageTypes.get(ShieldSurfDamageTypes.SHIELD_IMPACT, this.getWorld()), this, entity2);
         if (entity.damage(damageSource, (float) this.getDamage())) {
-            if (entity.getType() == EntityType.ENDERMAN) {
-                return;
-            }
             if (entity instanceof LivingEntity livingEntity2) {
                 if (entity2 instanceof LivingEntity) {
                     EnchantmentHelper.onUserDamaged(livingEntity2, entity2);
@@ -80,7 +74,7 @@ public class ProjectedShieldEntity extends PersistentProjectileEntity {
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
-        this.discard();
+        if (!this.getWorld().isClient()) this.discard();
     }
 
     @Override
