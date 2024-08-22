@@ -31,8 +31,8 @@ public class ShieldSurfTagGenerator {
         }
     }
 
-    public static class AmarongEntityTypeTagGenerator extends FabricTagProvider.EntityTypeTagProvider {
-        public AmarongEntityTypeTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public static class ShieldSurfEntityTypeTagGenerator extends FabricTagProvider.EntityTypeTagProvider {
+        public ShieldSurfEntityTypeTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
             super(output, registriesFuture);
         }
 

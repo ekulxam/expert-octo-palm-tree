@@ -13,7 +13,7 @@ public class ShieldSurfDataGenerator implements DataGeneratorEntrypoint {
 		FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 		pack.addProvider(ShieldSurfEnUsLangGenerator::new);
 		pack.addProvider(ShieldSurfTagGenerator.ShieldSurfDamageTypeTagGenerator::new);
-		pack.addProvider(ShieldSurfTagGenerator.AmarongEntityTypeTagGenerator::new);
+		pack.addProvider(ShieldSurfTagGenerator.ShieldSurfEntityTypeTagGenerator::new);
 		pack.addProvider(ShieldSurfDamageTypeGenerator::new);
 	}
 

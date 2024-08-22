@@ -13,7 +13,7 @@ import survivalblock.shield_surf.common.entity.ShieldboardEntity;
 
 public class ShieldSurfEntityTypes {
 
-    public static final EntityType<ShieldboardEntity> SHIELDBOARD = registerEntity("shieldboard", FabricEntityTypeBuilder.<ShieldboardEntity>create(SpawnGroup.MISC, ShieldboardEntity::new).dimensions(EntityDimensions.fixed(0.85f, 0.2125f)).fireImmune());
+    public static final EntityType<ShieldboardEntity> SHIELDBOARD = registerEntity("shieldboard", FabricEntityTypeBuilder.<ShieldboardEntity>create(SpawnGroup.MISC, ShieldboardEntity::new).dimensions(EntityDimensions.fixed(0.85f, 0.2125f)));
     public static final EntityType<ProjectedShieldEntity> PROJECTED_SHIELD = registerEntity("projected_shield", FabricEntityTypeBuilder.<ProjectedShieldEntity>create(SpawnGroup.MISC, ProjectedShieldEntity::new).dimensions(EntityDimensions.fixed(0.5f, 1.3f)));
 
     @SuppressWarnings("SameParameterValue")

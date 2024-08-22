@@ -14,6 +14,7 @@ public class ShieldSurfEnchantments {
     public static final Enchantment RAPID = new ShieldSurfingEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.FISHING_ROD, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
     public static final Enchantment EXPULSION = new ShieldSurfingEnchantment(6, Enchantment.Rarity.UNCOMMON, EnchantmentTarget.FISHING_ROD, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
     public static final Enchantment ORBIT = new ShieldSurfingEnchantment(Enchantment.Rarity.VERY_RARE, EnchantmentTarget.FISHING_ROD, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
+    public static final Enchantment REBOUND = new ShieldSurfingEnchantment(Enchantment.Rarity.VERY_RARE, EnchantmentTarget.FISHING_ROD, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
 
     public static void init() {
         Registry.register(Registries.ENCHANTMENT, ShieldSurf.id("shield_surf"), SHIELD_SURF);
@@ -21,5 +22,6 @@ public class ShieldSurfEnchantments {
         Registry.register(Registries.ENCHANTMENT, ShieldSurf.id("rapid"), RAPID);
         Registry.register(Registries.ENCHANTMENT, ShieldSurf.id("expulsion"), EXPULSION);
         Registry.register(Registries.ENCHANTMENT, ShieldSurf.id("orbit"), ORBIT);
+        Registry.register(Registries.ENCHANTMENT, ShieldSurf.id("rebound"), REBOUND);
     }
 }

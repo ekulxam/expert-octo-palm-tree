@@ -29,8 +29,12 @@ public abstract class LivingEntityMixin extends Entity implements ExpulsionDamag
         this.explusionAttackDamage = Math.max(this.explusionAttackDamage, this.lastDamageTaken);
     }
 
+    /**
+     * Allows for duck. Internally, this resets the value to 0.
+     * @return returns the expulsion attack damage
+     */
     @Override
-    public float enchancement_unbound$getExpulsionAttackDamage() {
+    public float shield_surf$getExpulsionAttackDamage() {
         float resetAfterMe = this.explusionAttackDamage;
         this.explusionAttackDamage = 0;
         return resetAfterMe;

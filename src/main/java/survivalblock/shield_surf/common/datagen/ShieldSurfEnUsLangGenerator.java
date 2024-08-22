@@ -39,6 +39,8 @@ public class ShieldSurfEnUsLangGenerator extends FabricLanguageProvider {
         translationBuilder.add("enchantment.shield_surf.expulsion.desc", "Using the shield while sneaking will cast out shields in a circle around the user. Damage scales with the greatest damage taken by the user since last cast.");
         translationBuilder.add("enchantment.shield_surf.orbit", "Orbit");
         translationBuilder.add("enchantment.shield_surf.orbit.desc", "Using the shield will summon a shield satellite that will orbit around the player. The shield satellite will block any entity-based damage only once before breaking.");
+        translationBuilder.add("enchantment.shield_surf.rebound", "Rebound");
+        translationBuilder.add("enchantment.shield_surf.rebound.desc", "Projectiles will reverse greatly upon hitting a the shield.");
 
         // sounds
         translationBuilder.add("subtitles.shield_surf.entity.projected_shield.hit", "Projected Shield hits");

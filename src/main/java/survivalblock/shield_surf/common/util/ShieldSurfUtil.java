@@ -8,14 +8,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import survivalblock.shield_surf.access.ExpulsionDamageAccess;
 import survivalblock.shield_surf.common.ShieldSurf;
-import survivalblock.shield_surf.common.ShieldSurfConfig;
 import survivalblock.shield_surf.common.compat.SurfingFabricShieldLib;
 import survivalblock.shield_surf.common.component.ShieldSatellitesComponent;
 import survivalblock.shield_surf.common.enchantment.ShieldSurfingEnchantment;
@@ -77,7 +75,7 @@ public class ShieldSurfUtil {
         if (world.isClient() || expulsionLevel <= 0 || !user.isSneaking()) {
             return;
         }
-        float damage = ((ExpulsionDamageAccess) user).enchancement_unbound$getExpulsionAttackDamage();
+        float damage = ((ExpulsionDamageAccess) user).shield_surf$getExpulsionAttackDamage();
         if (damage * 2 <= 100){
             damage *= 2;
         } else if (damage < 100) {

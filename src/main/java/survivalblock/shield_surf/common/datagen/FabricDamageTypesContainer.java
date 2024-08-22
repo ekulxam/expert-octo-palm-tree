@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import io.netty.util.internal.UnstableApi;
 import net.minecraft.entity.damage.DamageType;
+import org.jetbrains.annotations.Contract;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ import java.util.function.Consumer;
 public class FabricDamageTypesContainer {
 
     private final List<Pair<String, DamageType>> backing;
-    private final Logger LOGGER = LogUtils.getLogger();
 
     /**
      * Creates a new instance of {@link FabricDamageTypesContainer} with an ArrayList as backing
@@ -37,6 +37,7 @@ public class FabricDamageTypesContainer {
      * @param list the list that the backing will be assigned to
      * @throws IllegalStateException if the provided list is immutable
      */
+    @SuppressWarnings("deprecation")
     @UnstableApi
     public FabricDamageTypesContainer(List<Pair<String, DamageType>> list) {
         if (list instanceof ImmutableCollection<?>) {
@@ -46,7 +47,7 @@ public class FabricDamageTypesContainer {
         try {
             temporaryList = (List<Pair<String, DamageType>>) list.getClass().newInstance();
         } catch (Throwable t) {
-            LOGGER.error("Error when attempting to make a new instance of a list in the constructor of FabricDamageTypesContainer", t);
+            LogUtils.getLogger().error("Error when attempting to make a new instance of a list in the constructor of FabricDamageTypesContainer", t);
             temporaryList = new ArrayList<>();
         }
         if (!temporaryList.isEmpty()) temporaryList.clear();

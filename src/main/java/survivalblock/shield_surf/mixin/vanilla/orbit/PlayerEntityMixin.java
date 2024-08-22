@@ -20,7 +20,6 @@ import survivalblock.shield_surf.common.compat.SurfingFabricShieldLib;
 import survivalblock.shield_surf.common.component.ShieldSatellitesComponent;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
 
-@Debug(export = true)
 @SuppressWarnings({"UnreachableCode", "RedundantCast"})
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {

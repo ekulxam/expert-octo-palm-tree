@@ -125,7 +125,14 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
 
     @Override
     public boolean isFireImmune() {
-        return true;
+        if (super.isFireImmune()) {
+            return true;
+        }
+        ItemStack stack = this.asItemStack();
+        if (stack == null || stack.isEmpty()) {
+            return false;
+        }
+        return stack.getItem().isFireproof();
     }
 
     @Override
