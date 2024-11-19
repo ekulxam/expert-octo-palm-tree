@@ -47,6 +47,7 @@ public class ShieldSurfEnUsLangGenerator extends FabricLanguageProvider {
 
         // gamerules
         translationBuilder.add("gamerule.shieldSurfExpulsionMultiplier", "Shield Surf - Expulsion Projectile Multiplier");
+        translationBuilder.add("gamerule.shieldSurfReboundShieldsProjectileImmunity", "Shield Surf- Rebound Shields Are Immune to Projectiles");
 
         // midnightconfig
         translationBuilder.add("shield_surf.midnightconfig.title", "Shield Surf Client Config");

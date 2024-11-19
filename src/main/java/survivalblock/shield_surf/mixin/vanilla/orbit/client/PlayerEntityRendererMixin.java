@@ -60,7 +60,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
                     matrixStack.translate(0.0f, -0.6, 0.0f);
                 }
             }
-            BuiltinModelItemRenderer builtinModelItemRenderer = ((ItemRendererAccessor) MinecraftClient.getInstance().getItemRenderer()).getBuiltinModelItemRenderer();
+            BuiltinModelItemRenderer builtinModelItemRenderer = ((ItemRendererAccessor) MinecraftClient.getInstance().getItemRenderer()).shield_surf$getBuiltinModelItemRenderer();
             ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(false);
             builtinModelItemRenderer.render(satellitesComponent.getStack((int) (i * satellites / 360f)), ModelTransformationMode.NONE, matrixStack, vertexConsumerProvider, light, overlay);
             ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(true);

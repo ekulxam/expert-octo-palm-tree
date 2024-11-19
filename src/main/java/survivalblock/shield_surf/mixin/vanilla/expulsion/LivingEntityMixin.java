@@ -25,7 +25,7 @@ public abstract class LivingEntityMixin extends Entity implements ExpulsionDamag
     }
 
     @Inject(method = "damage", at = @At("RETURN"))
-    private void weWantTheMaximum(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+    private void weWantTheMaximum(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         this.explusionAttackDamage = Math.max(this.explusionAttackDamage, this.lastDamageTaken);
     }
 

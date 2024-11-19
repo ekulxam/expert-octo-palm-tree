@@ -1,6 +1,7 @@
 package survivalblock.shield_surf.mixin.vanilla.rebound;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -24,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
+import survivalblock.shield_surf.common.init.ShieldSurfGameRules;
 
 @Debug(export = true)
 @Mixin(LivingEntity.class)
@@ -44,6 +46,28 @@ public abstract class LivingEntityMixin extends Entity {
             return;
         }
         this.activeShieldStack = this.getActiveItem().copy();
+    }
+    @WrapWithCondition(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damageShield(F)V"))
+    private boolean doNotDamageShield(LivingEntity instance, float amount, DamageSource source, float amount2) {
+        return projectileImmunity(source);
+    }
+
+    @WrapWithCondition(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeShieldHit(Lnet/minecraft/entity/LivingEntity;)V"))
+    private boolean doNotTakeShieldHit(LivingEntity instance, LivingEntity attacker, DamageSource source, float amount) {
+        return projectileImmunity(source);
+    }
+
+    @Unique
+    private boolean projectileImmunity(DamageSource source) {
+        World world = this.getWorld();
+        if (world.isClient() || !world.getGameRules().getBoolean(ShieldSurfGameRules.REBOUND_SHIELDS_PROJECTILE_IMMUNITY)) {
+            return true;
+        }
+        if (this.activeShieldStack == null || this.activeShieldStack.isEmpty()) {
+            return true;
+        }
+        return !(source.getSource() instanceof ProjectileEntity) || EnchantmentHelper.getLevel(ShieldSurfEnchantments.REBOUND, this.activeShieldStack) <= 0;
+
     }
 
     @ModifyReturnValue(method = "damage", slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;despawnCounter:I", opcode = Opcodes.PUTFIELD, ordinal = 0)), at = @At("RETURN"))

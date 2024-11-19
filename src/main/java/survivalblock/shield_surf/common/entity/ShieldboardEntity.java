@@ -11,6 +11,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.util.function.BooleanBiFunction;
@@ -19,6 +20,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import survivalblock.shield_surf.common.component.ShieldStackComponent;
 import survivalblock.shield_surf.common.component.ShieldboardSpeedComponent;
@@ -39,9 +41,14 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
     private boolean shouldGoBackward;
     private boolean shouldTurnLeft;
     private boolean shouldTurnRight;
+    /**
+     * This field is used in {@link net.minecraft.entity.passive.AbstractHorseEntity} and is set to false when doing anger logic.<p>
+     * For my purposes, this field is always set to true unless modified by another source.
+     * I am not going to remove it because it may be of use in the future or to others.
+     */
     protected boolean jumping;
     protected float jumpingPower;
-    protected double defaultJumpStrength = 0.4;
+    protected double defaultJumpStrength = 0.6;
     protected boolean inAirForJump;
     public static final double MAX_SPEED = 0.4;
 
@@ -128,7 +135,7 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
         if (super.isFireImmune()) {
             return true;
         }
-        ItemStack stack = this.asItemStack();
+        ItemStack stack = this.getItemStack();
         if (stack == null || stack.isEmpty()) {
             return false;
         }
@@ -244,8 +251,21 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
         return entity instanceof LivingEntity living ? living : null;
     }
 
+    /**
+     * @return a COPY of the {@link ItemStack}
+     * @see ItemStack#copy()
+     */
     public ItemStack asItemStack() {
         return this.getShieldStackComponent().getShieldStack().copy();
+    }
+
+    /**
+     * @return the {@link ItemStack}<p>
+     * Beware of unintentionally modifying the {@link ItemStack}!
+     * @see ShieldboardEntity#asItemStack()
+     */
+    public ItemStack getItemStack() {
+        return this.getShieldStackComponent().getShieldStack();
     }
 
     @Override
@@ -526,6 +546,17 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
             }
         }
     }
+
+    @Override
+    public void onBubbleColumnSurfaceCollision(boolean drag) {
+        super.onBubbleColumnSurfaceCollision(drag);
+        this.getWorld().addParticle(ParticleTypes.SPLASH, this.getX() + (double)this.random.nextFloat(), this.getY() + 0.7, this.getZ() + (double)this.random.nextFloat(), 0.0, 0.0, 0.0);
+        if (this.random.nextInt(20) == 0) {
+            this.getWorld().playSound(this.getX(), this.getY(), this.getZ(), this.getSplashSound(), this.getSoundCategory(), 1.0F, 0.8F + 0.4F * this.random.nextFloat(), false);
+            this.emitGameEvent(GameEvent.SPLASH, this.getControllingPassenger());
+        }
+    }
+
     @Override
     public Direction getMovementDirection() {
         return super.getMovementDirection().rotateYClockwise();
@@ -572,10 +603,19 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
 
     @Override
     public boolean shouldSpawnSprintingParticles() {
+        if (!this.isAlive()) {
+            return false;
+        }
+        if (this.isInLava() || this.isTouchingWater() || this.horizontalCollision) {
+            return false;
+        }
         ShieldboardSpeedComponent shieldboardSpeedComponent = this.getShieldboardSpeedComponent();
         boolean hasEnoughSpeed = Math.abs(shieldboardSpeedComponent.getCurrentBaseSpeed()) > (shieldboardSpeedComponent.getMaxBaseSpeed() / 2);
+        if (!hasEnoughSpeed) {
+            return false;
+        }
         LivingEntity controller = this.getControllingPassenger();
-        return !this.isInLava() && this.isAlive() && !this.isTouchingWater() && controller != null && !controller.shouldSpawnSprintingParticles() && hasEnoughSpeed && !this.horizontalCollision;
+        return controller != null && !controller.shouldSpawnSprintingParticles();
     }
 
     public int getEnchantmentLevel(int max) {
@@ -628,7 +668,7 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
     }
 
     public double getJumpStrength() {
-        return defaultJumpStrength + getEnchantmentLevel(10) * 0.2;
+        return defaultJumpStrength;
     }
 
     public boolean isInAirForJump() {

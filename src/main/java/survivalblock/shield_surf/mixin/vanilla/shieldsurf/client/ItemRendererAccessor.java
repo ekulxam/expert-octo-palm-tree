@@ -8,5 +8,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(ItemRenderer.class)
 public interface ItemRendererAccessor {
     @Accessor("builtinModelItemRenderer")
-    BuiltinModelItemRenderer getBuiltinModelItemRenderer();
+    BuiltinModelItemRenderer shield_surf$getBuiltinModelItemRenderer();
 }

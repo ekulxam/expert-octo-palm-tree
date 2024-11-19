@@ -29,14 +29,14 @@ public class ShieldboardEntityRenderer extends EntityRenderer<ShieldboardEntity>
 
     @Override
     public void render(ShieldboardEntity shieldboardEntity, float yaw, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light) {
-        ItemStack stack = shieldboardEntity.asItemStack();
+        ItemStack stack = shieldboardEntity.getItemStack();
         int overlay = OverlayTexture.DEFAULT_UV;
         matrixStack.push();
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180F - yaw));
         matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90.0F));
         matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0F));
         matrixStack.translate(0f, 0f, -0.135f);
-        BuiltinModelItemRenderer builtinModelItemRenderer = ((ItemRendererAccessor) MinecraftClient.getInstance().getItemRenderer()).getBuiltinModelItemRenderer();
+        BuiltinModelItemRenderer builtinModelItemRenderer = ((ItemRendererAccessor) MinecraftClient.getInstance().getItemRenderer()).shield_surf$getBuiltinModelItemRenderer();
         ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(false);
         builtinModelItemRenderer.render(stack, ModelTransformationMode.NONE, matrixStack, vertexConsumerProvider, light, overlay);
         ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(true);

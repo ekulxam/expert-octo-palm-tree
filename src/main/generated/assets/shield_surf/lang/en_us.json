@@ -20,6 +20,7 @@
   "entity.shield_surf.projected_shield": "Projected Shield",
   "entity.shield_surf.shieldboard": "Shieldboard",
   "gamerule.shieldSurfExpulsionMultiplier": "Shield Surf - Expulsion Projectile Multiplier",
+  "gamerule.shieldSurfReboundShieldsProjectileImmunity": "Shield Surf- Rebound Shields Are Immune to Projectiles",
   "shield_surf.midnightconfig.orbitingShieldsFlattenWhileSwimming": "Orbiting Shields Render Sideways When The Player's Height Is At Most One",
   "shield_surf.midnightconfig.orbitingShieldsRotateClockwise": "Orbiting Shields Rotate Clockwise Around Their Origin",
   "shield_surf.midnightconfig.projectedShieldsRenderOutwards": "Projected Shields Render Outwards",
