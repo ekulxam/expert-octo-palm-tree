@@ -32,7 +32,7 @@ public class ShieldboardSpeedComponent implements AutoSyncedComponent {
     }
 
     public double getMaxBaseSpeed() {
-        return ShieldboardEntity.MAX_SPEED + this.obj.getEnchantmentLevel(50) * 0.1;
+        return ShieldboardEntity.MAX_SPEED + (this.obj.getEnchantmentLevel(50) - 1) * 0.05;
     }
 
     public void setCurrentBaseSpeed(double currentBaseSpeed) {

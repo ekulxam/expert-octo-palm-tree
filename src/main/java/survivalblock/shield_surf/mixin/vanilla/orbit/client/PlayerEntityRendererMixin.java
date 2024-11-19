@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import survivalblock.shield_surf.access.RenderHandleSometimesAccess;
 import survivalblock.shield_surf.client.util.ShieldSurfClientUtil;
-import survivalblock.shield_surf.common.ShieldSurfConfig;
+import survivalblock.shield_surf.common.compat.config.ShieldSurfConfig;
 import survivalblock.shield_surf.common.component.ShieldSatellitesComponent;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
 import survivalblock.shield_surf.mixin.vanilla.shieldsurf.client.ItemRendererAccessor;
@@ -50,10 +50,10 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
         int overlay = OverlayTexture.DEFAULT_UV;
         for (float i = 0; i < 360; i += 360 / (float) satellites) {
             matrixStack.push();
-            matrixStack.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(i + (satellitesComponent.getRotation() * (ShieldSurfConfig.orbitingShieldsRotateClockwise ? 1 : -1)) + (ShieldSurfConfig.projectedShieldsRenderOutwards ? 0 : 180)));
+            matrixStack.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(i + (satellitesComponent.getRotation() * (ShieldSurfConfig.orbitingShieldsRotateClockwise() ? 1 : -1)) + (ShieldSurfConfig.projectedShieldsRenderOutwards() ? 0 : 180)));
             matrixStack.translate(0.0f, 1.1f, 1.6f);
             if (player.getHeight() <= 1) {
-                if (ShieldSurfConfig.orbitingShieldsFlattenWhileSwimming) {
+                if (ShieldSurfConfig.orbitingShieldsFlattenWhileSwimming()) {
                     matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
                     matrixStack.translate(-player.getHeight(), 0.0f, -0.0025f + 0.2 * Math.max(0, satellites - 8));
                 } else {

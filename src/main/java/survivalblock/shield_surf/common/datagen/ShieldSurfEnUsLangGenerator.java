@@ -49,11 +49,19 @@ public class ShieldSurfEnUsLangGenerator extends FabricLanguageProvider {
         translationBuilder.add("gamerule.shieldSurfExpulsionMultiplier", "Shield Surf - Expulsion Projectile Multiplier");
         translationBuilder.add("gamerule.shieldSurfReboundShieldsProjectileImmunity", "Shield Surf- Rebound Shields Are Immune to Projectiles");
 
-        // midnightconfig
-        translationBuilder.add("shield_surf.midnightconfig.title", "Shield Surf Client Config");
-        translationBuilder.add("shield_surf.midnightconfig.projectedShieldsRenderOutwards", "Projected Shields Render Outwards");
-        translationBuilder.add("shield_surf.midnightconfig.projectedShieldsRenderWithHandle", "Projected Shields Render With Handle");
-        translationBuilder.add("shield_surf.midnightconfig.orbitingShieldsFlattenWhileSwimming", "Orbiting Shields Render Sideways When The Player's Height Is At Most One");
-        translationBuilder.add("shield_surf.midnightconfig.orbitingShieldsRotateClockwise", "Orbiting Shields Rotate Clockwise Around Their Origin");
+        // config
+        translationBuilder.add("shield_surf.config.title", "Shield Surf Config");
+        translationBuilder.add("shield_surf.config.client", "Client");
+        translationBuilder.add("shield_surf.config.option.boolean.projectedShieldsRenderOutwards", "Projected Shields Render Outwards");
+        translationBuilder.add("shield_surf.config.option.boolean.projectedShieldsRenderOutwards.desc", "Projected Shields render facing outwards");
+        translationBuilder.add("shield_surf.config.option.boolean.projectedShieldsRenderWithHandle", "Projected Shields Render With Handle");
+        translationBuilder.add("shield_surf.config.option.boolean.projectedShieldsRenderWithHandle.desc", "Projected Shields render with their handles");
+        translationBuilder.add("shield_surf.config.option.boolean.orbitingShieldsFlattenWhileSwimming", "Orbiting Shields Render Sideways Sometimes");
+        translationBuilder.add("shield_surf.config.option.boolean.orbitingShieldsFlattenWhileSwimming.desc", "Orbiting Shields render sideways when the player's height is at most one");
+        translationBuilder.add("shield_surf.config.option.boolean.orbitingShieldsRotateClockwise", "Orbiting Shields Rotate Clockwise");
+        translationBuilder.add("shield_surf.config.option.boolean.orbitingShieldsRotateClockwise.desc", "Orbiting Shields rotate clockwise around their origin");
+        // command
+        translationBuilder.add("commands.shieldsurfconfig.noyacl", "Unable to generate Shield Surf config screen. Do you have YACL installed?");
+        translationBuilder.add("commands.shieldsurfconfig.fail", "Unable to open Shield Surf config screen");
     }
 }

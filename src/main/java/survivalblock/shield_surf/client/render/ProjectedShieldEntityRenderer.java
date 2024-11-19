@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 import survivalblock.shield_surf.access.RenderHandleSometimesAccess;
-import survivalblock.shield_surf.common.ShieldSurfConfig;
+import survivalblock.shield_surf.common.compat.config.ShieldSurfConfig;
 import survivalblock.shield_surf.common.entity.ProjectedShieldEntity;
 import survivalblock.shield_surf.mixin.vanilla.shieldsurf.client.ItemRendererAccessor;
 
@@ -28,10 +28,10 @@ public class ProjectedShieldEntityRenderer extends EntityRenderer<ProjectedShiel
         ItemStack stack = projectedShield.asItemStack();
         int overlay = OverlayTexture.DEFAULT_UV;
         matrixStack.push();
-        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(yaw + (ShieldSurfConfig.projectedShieldsRenderOutwards ? 0 : 180)));
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(yaw + (ShieldSurfConfig.projectedShieldsRenderOutwards() ? 0 : 180)));
         matrixStack.translate(0.0f, 0.6f, 0.0f);
         BuiltinModelItemRenderer builtinModelItemRenderer = ((ItemRendererAccessor) MinecraftClient.getInstance().getItemRenderer()).shield_surf$getBuiltinModelItemRenderer();
-        ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(ShieldSurfConfig.projectedShieldsRenderWithHandle);
+        ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(ShieldSurfConfig.projectedShieldsRenderWithHandle());
         builtinModelItemRenderer.render(stack, ModelTransformationMode.NONE, matrixStack, vertexConsumerProvider, light, overlay);
         ((RenderHandleSometimesAccess) builtinModelItemRenderer).shield_surf$setShouldRenderShieldHandle(true);
         matrixStack.pop();

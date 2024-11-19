@@ -14,8 +14,8 @@ public class ShieldSurfMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        ShieldSurf.resetHasFabricShieldLib();
-        if (!ShieldSurf.hasFabricShieldLib) {
+        ShieldSurf.resetShouldDoConfig();
+        if (!ShieldSurf.resetHasFabricShieldLib()) {
             ShieldSurf.LOGGER.warn("No mods with mod id" + FABRIC_SHIELD_LIB_ID + "have been found. Mixins for FabricShieldLib will not be loaded.");
         }
     }
@@ -29,6 +29,9 @@ public class ShieldSurfMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (targetClassName.contains(FABRIC_SHIELD_LIB_ID)) {
             return ShieldSurf.hasFabricShieldLib;
+        }
+        if (targetClassName.contains("config")) {
+            return ShieldSurf.shouldDoConfig;
         }
         return true;
     }

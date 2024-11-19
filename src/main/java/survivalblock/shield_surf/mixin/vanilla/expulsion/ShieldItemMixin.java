@@ -15,11 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import survivalblock.shield_surf.access.ExpulsionDamageAccess;
-import survivalblock.shield_surf.common.ShieldSurf;
-import survivalblock.shield_surf.common.ShieldSurfConfig;
-import survivalblock.shield_surf.common.entity.ProjectedShieldEntity;
-import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
 import survivalblock.shield_surf.common.util.ShieldSurfUtil;
 
 @Mixin(ShieldItem.class)

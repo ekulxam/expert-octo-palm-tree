@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -31,6 +31,10 @@ repositories {
         name "jitpack"
         url "https://jitpack.io"
     }
+    maven {
+        name 'Xander Maven'
+        url 'https://maven.isxander.dev/releases'
+    }
 }
 
 fabricApi {
@@ -46,14 +50,16 @@ dependencies {
     include modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cardinal_components_version}")
     include modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cardinal_components_version}")
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    include modImplementation("maven.modrinth:midnightlib:${project.midnightlib_version}")
+    modApi("dev.isxander:yet-another-config-lib:${project.yet_another_config_lib_version}")
+
+    modApi "com.terraformersmc:modmenu:${mod_menu_version}"
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
-    modRuntimeOnly "com.terraformersmc:modmenu:${mod_menu_version}"
 
     modImplementation "com.github.CrimsonDawn45:Fabric-Shield-Lib:v${project.fabric_shield_lib_version}"
     modImplementation ("com.github.Chocohead:Fabric-ASM:v2.3") {
         exclude (group: "net.fabricmc.fabric-api")
     }
+    modImplementation("maven.modrinth:midnightlib:${project.midnightlib_version}")
 }
 
 processResources {

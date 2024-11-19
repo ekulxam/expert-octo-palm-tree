@@ -50,7 +50,7 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
     protected float jumpingPower;
     protected double defaultJumpStrength = 0.6;
     protected boolean inAirForJump;
-    public static final double MAX_SPEED = 0.4;
+    public static final double MAX_SPEED = 0.36921875; // 19.20 blocks/sec at level 1 on grass blocks
 
     public ShieldboardEntity(EntityType<?> type, World world) {
         super(type, world);
@@ -330,7 +330,7 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
         }
         double yVelocity = this.getVelocity().y;
         if (this.location != null && this.location.compareTo(BoatEntity.Location.IN_WATER) == 0) {
-            speed *= 1.75;
+            speed *= 2.75;
         }
         yVelocity += this.shouldGetOutOfBlock() ? this.location == BoatEntity.Location.ON_LAND && this.lastLocation == BoatEntity.Location.ON_LAND ? this.soulSandStuck() : 0.095 : 0;
         this.setVelocity(MathHelper.sin(-this.getYaw() * ((float) Math.PI / 180)) * speed, yVelocity, MathHelper.cos(this.getYaw() * ((float) Math.PI / 180)) * speed);
@@ -563,7 +563,7 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
     }
 
     @Override
-    protected Entity.MoveEffect getMoveEffect() {
+    protected MoveEffect getMoveEffect() {
         return MoveEffect.EVENTS;
     }
 

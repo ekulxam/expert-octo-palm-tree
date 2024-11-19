@@ -27,6 +27,9 @@
     ],
     "fabric-datagen": [
       "survivalblock.shield_surf.common.datagen.ShieldSurfDataGenerator"
+    ],
+    "modmenu": [
+      "survivalblock.shield_surf.common.compat.config.ShieldSurfModMenuCompat"
     ]
   },
   "mixins": [

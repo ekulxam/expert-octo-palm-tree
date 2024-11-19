@@ -26,6 +26,7 @@
     "vanilla.vanillachanges.enchantableshields.ShieldItemMixin"
   ],
   "client": [
+    "config.client.ShieldSurfConfigMixin",
     "vanilla.orbit.client.PlayerEntityRendererMixin",
     "vanilla.rapid.ClientPlayerEntityMixin",
     "vanilla.shieldsurf.client.BipedEntityModelMixin",
