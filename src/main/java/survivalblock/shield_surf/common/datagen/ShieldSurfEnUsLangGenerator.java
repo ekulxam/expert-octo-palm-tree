@@ -40,14 +40,14 @@ public class ShieldSurfEnUsLangGenerator extends FabricLanguageProvider {
         translationBuilder.add("enchantment.shield_surf.orbit", "Orbit");
         translationBuilder.add("enchantment.shield_surf.orbit.desc", "Using the shield will summon a shield satellite that will orbit around the player. The shield satellite will block any entity-based damage only once before breaking.");
         translationBuilder.add("enchantment.shield_surf.rebound", "Rebound");
-        translationBuilder.add("enchantment.shield_surf.rebound.desc", "Projectiles will reverse greatly upon hitting a the shield.");
+        translationBuilder.add("enchantment.shield_surf.rebound.desc", "Blocked Projectiles will reverse direction greatly upon hitting the shield.");
 
         // sounds
         translationBuilder.add("subtitles.shield_surf.entity.projected_shield.hit", "Projected Shield hits");
 
         // gamerules
         translationBuilder.add("gamerule.shieldSurfExpulsionMultiplier", "Shield Surf - Expulsion Projectile Multiplier");
-        translationBuilder.add("gamerule.shieldSurfReboundShieldsProjectileImmunity", "Shield Surf- Rebound Shields Are Immune to Projectiles");
+        translationBuilder.add("gamerule.shieldSurfReboundShieldsHaveProjectileImmunity", "Shield Surf- Rebound Shields Are Immune to Projectiles");
 
         // config
         translationBuilder.add("shield_surf.config.title", "Shield Surf Config");

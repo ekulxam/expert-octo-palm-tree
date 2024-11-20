@@ -60,14 +60,13 @@ public abstract class LivingEntityMixin extends Entity {
     @Unique
     private boolean projectileImmunity(DamageSource source) {
         World world = this.getWorld();
-        if (world.isClient() || !world.getGameRules().getBoolean(ShieldSurfGameRules.REBOUND_SHIELDS_PROJECTILE_IMMUNITY)) {
+        if (world.isClient() || !world.getGameRules().getBoolean(ShieldSurfGameRules.PROJECTILE_REFLECTION_SHIELDS_HAVE_PROJECTILE_IMMUNITY)) {
             return true;
         }
         if (this.activeShieldStack == null || this.activeShieldStack.isEmpty()) {
             return true;
         }
         return !(source.getSource() instanceof ProjectileEntity) || EnchantmentHelper.getLevel(ShieldSurfEnchantments.REBOUND, this.activeShieldStack) <= 0;
-
     }
 
     @ModifyReturnValue(method = "damage", slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;despawnCounter:I", opcode = Opcodes.PUTFIELD, ordinal = 0)), at = @At("RETURN"))

@@ -7,8 +7,8 @@ import net.minecraft.world.GameRules;
 public class ShieldSurfGameRules {
     public static final GameRules.Key<GameRules.IntRule> EXPULSION_MULTIPLIER =
             GameRuleRegistry.register("shieldSurfExpulsionMultiplier", GameRules.Category.MISC, GameRuleFactory.createIntRule(3, 1, 1000));
-    public static final GameRules.Key<GameRules.BooleanRule> REBOUND_SHIELDS_PROJECTILE_IMMUNITY =
-            GameRuleRegistry.register("shieldSurfReboundShieldsProjectileImmunity", GameRules.Category.MISC, GameRuleFactory.createBooleanRule(false));
+    public static final GameRules.Key<GameRules.BooleanRule> PROJECTILE_REFLECTION_SHIELDS_HAVE_PROJECTILE_IMMUNITY =
+            GameRuleRegistry.register("shieldSurfReboundShieldsHaveProjectileImmunity", GameRules.Category.MISC, GameRuleFactory.createBooleanRule(false));
 
     public static void init() {
 
