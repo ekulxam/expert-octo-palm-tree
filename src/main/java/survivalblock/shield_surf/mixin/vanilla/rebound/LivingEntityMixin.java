@@ -60,7 +60,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Unique
     private boolean projectileImmunity(DamageSource source) {
         World world = this.getWorld();
-        if (world.isClient() || !world.getGameRules().getBoolean(ShieldSurfGameRules.PROJECTILE_REFLECTION_SHIELDS_HAVE_PROJECTILE_IMMUNITY)) {
+        if (world.isClient() || !world.getGameRules().getBoolean(ShieldSurfGameRules.REBOUND_SHIELDS_HAVE_PROJECTILE_IMMUNITY)) {
             return true;
         }
         if (this.activeShieldStack == null || this.activeShieldStack.isEmpty()) {
