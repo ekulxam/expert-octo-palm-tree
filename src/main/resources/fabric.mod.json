@@ -8,9 +8,9 @@
 	"Survivalblock"
   ],
   "contact": {
-	"homepage": "https://www.curseforge.com/minecraft/mc-mods/enchancement",
-	"sources": "https://github.com/MoriyaShiine/enchancement",
-	"issues": "https://github.com/MoriyaShiine/enchancement/issues"
+	"homepage": "https://modrinth.com/mod/shield_surf",
+	"sources": "https://github.com/ekulxam/shield_surf",
+	"issues": "https://github.com/ekulxam/shield_surf/issues"
   },
   "license": "MIT-0",
   "icon": "assets/shield_surf/icon.png",
