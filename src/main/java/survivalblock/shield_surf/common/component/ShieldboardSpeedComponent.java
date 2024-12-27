@@ -1,11 +1,9 @@
 package survivalblock.shield_surf.common.component;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import survivalblock.shield_surf.common.entity.ShieldboardEntity;
-import survivalblock.shield_surf.common.init.ShieldSurfEnchantments;
 import survivalblock.shield_surf.common.init.ShieldSurfEntityComponents;
 
 public class ShieldboardSpeedComponent implements AutoSyncedComponent {

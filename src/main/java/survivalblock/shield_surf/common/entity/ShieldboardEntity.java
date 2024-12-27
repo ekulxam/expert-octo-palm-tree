@@ -48,7 +48,7 @@ public class ShieldboardEntity extends Entity implements JumpingMount {
      */
     protected boolean jumping;
     protected float jumpingPower;
-    protected double defaultJumpStrength = 0.4;
+    protected final double defaultJumpStrength = 0.4;
     protected boolean inAirForJump;
     public static final double MAX_SPEED = 0.36921875; // 19.20 blocks/sec at level 1 on grass blocks
 

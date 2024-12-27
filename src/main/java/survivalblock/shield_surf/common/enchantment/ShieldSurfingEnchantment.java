@@ -27,7 +27,6 @@ public class ShieldSurfingEnchantment extends Enchantment {
         return super.canAccept(other) && ShieldSurfUtil.cancelShieldEnchantments(this, other);
     }
 
-    @SuppressWarnings("RedundantMethodOverride")
     @Override
     public int getMinLevel() {
         return 1;

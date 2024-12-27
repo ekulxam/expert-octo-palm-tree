@@ -3,7 +3,6 @@ package survivalblock.shield_surf.common.compat;
 import com.github.crimsondawn45.fabricshieldlib.lib.event.ShieldBlockCallback;
 import com.github.crimsondawn45.fabricshieldlib.lib.object.FabricBannerShieldItem;
 import com.github.crimsondawn45.fabricshieldlib.lib.object.FabricShieldItem;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;

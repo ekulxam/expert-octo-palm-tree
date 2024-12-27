@@ -6,8 +6,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import io.netty.util.internal.UnstableApi;
 import net.minecraft.entity.damage.DamageType;
-import org.jetbrains.annotations.Contract;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -16,9 +16,7 @@ public class ShieldSatellitesComponent implements AutoSyncedComponent, CommonTic
     private final PlayerEntity obj;
     private int satellites = 0;
     private int rotation = 0;
-
-    @SuppressWarnings("FieldMayBeFinal")
-    private List<ItemStack> itemStacks = new ArrayList<>();
+    private final List<ItemStack> itemStacks = new ArrayList<>();
     public static final int maxSatellites = 16;
 
     public ShieldSatellitesComponent(PlayerEntity obj) {

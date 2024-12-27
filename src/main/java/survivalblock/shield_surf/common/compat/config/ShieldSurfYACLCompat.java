@@ -49,12 +49,12 @@ public class ShieldSurfYACLCompat {
                                         .build())
                                 .build())
                         .build())
-                .save(() -> ShieldSurfYACLCompat.HANDLER.save())
+                .save(HANDLER::save)
                 .build()
                 .generateScreen(parent);
     }
 
-    public static ConfigClassHandler<ShieldSurfYACLCompat> HANDLER = ConfigClassHandler.createBuilder(ShieldSurfYACLCompat.class)
+    public static final ConfigClassHandler<ShieldSurfYACLCompat> HANDLER = ConfigClassHandler.createBuilder(ShieldSurfYACLCompat.class)
             .id(ShieldSurf.id("shield_surf"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(FabricLoader.getInstance().getConfigDir().resolve("shield_surf.json5"))
